@@ -27,9 +27,9 @@ var rootCmd = &cobra.Command{
 	Short: "Static markdown blog backend",
 	Long:  "Blogctl manages blog markdown-based posts database-less and generates a static website on-demand",
 	Run: func(cmd *cobra.Command, args []string) {
-		if *Version {
-			fmt.Printf("BuildVersion: %s", BlogVersion)
-			fmt.Printf("BuildDate: %s", BlogDate)
+		if Version {
+			fmt.Println("BuildVersion: ", BuildVersion)
+			fmt.Println("BuildDate: ", BuildDate)
 		}
 	},
 }
@@ -57,5 +57,12 @@ func init() {
 		"path",
 		DEFAULT_BLOG_PATH,
 		fmt.Sprintf("Path to blog content. Default: %s", DEFAULT_BLOG_PATH),
+	)
+
+	rootCmd.Flags().BoolVar(
+		&Version,
+		"version",
+		false,
+		fmt.Sprintf("Print build information."),
 	)
 }

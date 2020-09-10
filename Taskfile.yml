@@ -6,6 +6,7 @@ includes:
 
 vars:
   BINARY_NAME: 'blogctl'
+  PATH: 'github.com/RaphaelPour/blogctl'
 
 tasks:
   bin:

@@ -16,7 +16,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package main
 
-import "3vilcookie/blogctl/cmd"
+import "github.com/RaphaelPour/blogctl/cmd"
 
 func main() {
 	cmd.Execute()

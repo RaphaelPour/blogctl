@@ -17,6 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"regexp"
 	"strings"
@@ -25,10 +26,16 @@ import (
 var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a new post",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
+
+		if Title == "" {
+			return fmt.Errorf("Title missing")
+		}
 		/* Generate slug */
 
 		/* Check if sluf already exists */
+
+		return nil
 	},
 }
 
@@ -40,7 +47,7 @@ var (
 func init() {
 	postCmd.AddCommand(addCmd)
 
-	addCmd.PersistentFlags().StringVar(&Title, "title", "", "Title of the post")
+	addCmd.PersistentFlags().StringVar(&Title, "title", "", "Title of the post (required)")
 }
 
 func slug(s string) string {

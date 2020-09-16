@@ -21,13 +21,21 @@ import (
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 
+	"github.com/RaphaelPour/blogctl/pkg/metadata"
 	shellquote "github.com/kballard/go-shellquote"
-	"os/exec"
 )
+
+const CONTENT_FILE = "content.md"
+
+func GetContentFile(postPath string) string {
+	return filepath.Join(postPath, CONTENT_FILE)
+}
 
 var addCmd = &cobra.Command{
 	Use:   "add",
@@ -56,10 +64,15 @@ var addCmd = &cobra.Command{
 			return fmt.Errorf("Error creating post dir: %s", err)
 		}
 
-		postFile := filepath.Join(postPath, "content.md")
-		if err := ioutil.WriteFile(postFile, []byte(content), os.ModePerm); err != nil {
+		if err := ioutil.WriteFile(GetContentFile(postPath), []byte(content), os.ModePerm); err != nil {
 			return fmt.Errorf("Error writing post: %s", err)
 		}
+
+		/* Store metadata info */
+		metadata := new(metadata.Metadata)
+		metadata.Title = Title
+		metadata.CreatedAt = time.Now()
+		metadata.Save(postPath)
 
 		return nil
 	},

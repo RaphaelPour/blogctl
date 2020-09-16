@@ -19,8 +19,14 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
+
+	shellquote "github.com/kballard/go-shellquote"
+	"os/exec"
 )
 
 var addCmd = &cobra.Command{
@@ -31,9 +37,29 @@ var addCmd = &cobra.Command{
 		if Title == "" {
 			return fmt.Errorf("Title missing")
 		}
-		/* Generate slug */
 
-		/* Check if sluf already exists */
+		/* Generate slug */
+		slug := slug(Title)
+
+		/* Check if slug already exists */
+
+		/* Ask user for input */
+		content := fmt.Sprintf("# %s\n\n", Title)
+		err := Open(&content)
+		if err != nil {
+			return fmt.Errorf("Error getting content from user: %s", err)
+		}
+
+		/* Save post at the right place */
+		postPath := filepath.Join(BlogPath, slug)
+		if err := os.Mkdir(postPath, os.ModeDir|os.ModePerm); err != nil {
+			return fmt.Errorf("Error creating post dir: %s", err)
+		}
+
+		postFile := filepath.Join(postPath, "content.md")
+		if err := ioutil.WriteFile(postFile, []byte(content), os.ModePerm); err != nil {
+			return fmt.Errorf("Error writing post: %s", err)
+		}
 
 		return nil
 	},
@@ -52,4 +78,53 @@ func init() {
 
 func slug(s string) string {
 	return SlugRegex.ReplaceAllString(strings.ReplaceAll(strings.ToLower(s), " ", "-"), "")
+}
+
+func Open(initialValue *string) error {
+	var editor string
+	if val, ok := os.LookupEnv("EDITOR"); ok {
+		editor = val
+	}
+	if val, ok := os.LookupEnv("VISUAL"); ok {
+		editor = val
+	}
+	if editor == "" {
+		return fmt.Errorf("set EDITOR or VISUAL variable")
+	}
+
+	file, err := ioutil.TempFile("", "new-post*.md")
+	if err != nil {
+		return err
+	}
+	defer os.Remove(file.Name())
+
+	if _, err := file.WriteString(*initialValue); err != nil {
+		return err
+	}
+
+	if err := file.Close(); err != nil {
+		return err
+	}
+
+	args, err := shellquote.Split(editor)
+	if err != nil {
+		return err
+	}
+	args = append(args, file.Name())
+
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+
+	raw, err := ioutil.ReadFile(file.Name())
+	if err != nil {
+		return err
+	}
+
+	*initialValue = string(raw)
+	return nil
 }

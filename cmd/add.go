@@ -28,6 +28,7 @@ import (
 	"time"
 
 	"github.com/RaphaelPour/blogctl/pkg/metadata"
+	"github.com/fatih/color"
 	shellquote "github.com/kballard/go-shellquote"
 )
 
@@ -53,9 +54,12 @@ var addCmd = &cobra.Command{
 
 		/* Ask user for input */
 		content := fmt.Sprintf("# %s\n\n", Title)
-		err := Open(&content)
-		if err != nil {
-			return fmt.Errorf("Error getting content from user: %s", err)
+
+		if Interactive {
+			err := Open(&content)
+			if err != nil {
+				return fmt.Errorf("Error getting content from user: %s", err)
+			}
 		}
 
 		/* Save post at the right place */
@@ -77,19 +81,22 @@ var addCmd = &cobra.Command{
 			return err
 		}
 
+		color.Green(GetContentFile(postPath))
 		return nil
 	},
 }
 
 var (
-	Title     string
-	SlugRegex = regexp.MustCompile(`[^A-Za-z0-9-]`)
+	Title       string
+	Interactive bool
+	SlugRegex   = regexp.MustCompile(`[^A-Za-z0-9-]`)
 )
 
 func init() {
 	postCmd.AddCommand(addCmd)
 
 	addCmd.PersistentFlags().StringVar(&Title, "title", "", "Title of the post (required)")
+	addCmd.PersistentFlags().BoolVar(&Interactive, "interactive", false, "Opens up default editor with new post.")
 }
 
 func slug(s string) string {

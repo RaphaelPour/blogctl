@@ -73,7 +73,9 @@ var addCmd = &cobra.Command{
 			Title:     Title,
 			CreatedAt: time.Now(),
 		}
-		metadata.Save(postPath)
+		if err := metadata.Save(postPath); err != nil {
+			return err
+		}
 
 		return nil
 	},

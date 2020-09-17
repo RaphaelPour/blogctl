@@ -63,6 +63,6 @@ func init() {
 		&Version,
 		"version",
 		false,
-		fmt.Sprintf("Print build information."),
+		"Print build information.",
 	)
 }

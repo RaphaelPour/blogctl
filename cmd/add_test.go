@@ -21,5 +21,5 @@ func TestSlug(t *testing.T) {
 	require.Equal(t, "lisp", slug("((lisp))"))
 
 	/* Everything together */
-	require.Equal(t, "2-be--2-be", slug("2 BE || ! 2 BE"))
+	require.Equal(t, "2-be---2-be", slug("2 BE || ! 2 BE"))
 }

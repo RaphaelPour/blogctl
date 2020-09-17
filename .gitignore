@@ -7,3 +7,4 @@ ci-build/
 *.out
 
 blog/
+coverage/

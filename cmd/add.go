@@ -69,9 +69,10 @@ var addCmd = &cobra.Command{
 		}
 
 		/* Store metadata info */
-		metadata := new(metadata.Metadata)
-		metadata.Title = Title
-		metadata.CreatedAt = time.Now()
+		metadata := &metadata.Metadata{
+			Title:     Title,
+			CreatedAt: time.Now(),
+		}
 		metadata.Save(postPath)
 
 		return nil

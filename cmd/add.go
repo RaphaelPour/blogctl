@@ -95,8 +95,8 @@ var (
 func init() {
 	postCmd.AddCommand(addCmd)
 
-	addCmd.PersistentFlags().StringVar(&Title, "title", "", "Title of the post (required)")
-	addCmd.PersistentFlags().BoolVar(&Interactive, "interactive", false, "Opens up default editor with new post.")
+	addCmd.PersistentFlags().StringVarP(&Title, "title", "t", "", "Title of the post (required)")
+	addCmd.PersistentFlags().BoolVarP(&Interactive, "interactive", "i", false, "Opens default editor with new post.")
 }
 
 func slug(s string) string {

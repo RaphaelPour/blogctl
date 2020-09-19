@@ -98,7 +98,7 @@ var renderCmd = &cobra.Command{
 		/* Put everything together */
 		t, err := template.New("blog").Parse(TEMPLATE)
 		if err != nil {
-			fmt.Errorf("Error parsing the html template: %s", err)
+			return fmt.Errorf("Error parsing the html template: %s", err)
 		}
 
 		/* Save site to out dir  */
@@ -144,16 +144,18 @@ var (
 func init() {
 	rootCmd.AddCommand(renderCmd)
 
-	rootCmd.PersistentFlags().StringVar(
+	rootCmd.PersistentFlags().StringVarP(
 		&OutPath,
 		"out",
+		"o",
 		DEFAULT_OUT_PATH,
 		"Output folder.",
 	)
 
-	rootCmd.PersistentFlags().BoolVar(
+	rootCmd.PersistentFlags().BoolVarP(
 		&Force,
 		"force",
+		"f",
 		false,
 		"Overwrites an existing output folder.",
 	)

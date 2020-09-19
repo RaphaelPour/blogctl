@@ -76,7 +76,7 @@ var renderCmd = &cobra.Command{
 				)
 			}
 
-			metadata, err := metadata.LoadMetadata(postPath)
+			metadata, err := metadata.Load(postPath)
 			if err != nil {
 				return err
 			}

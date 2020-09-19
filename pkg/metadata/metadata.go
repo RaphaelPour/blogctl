@@ -26,7 +26,7 @@ func GetMetadataPath(postPath string) string {
 	return filepath.Join(postPath, METADATA_FILE)
 }
 
-func LoadMetadata(postPath string) (*Metadata, error) {
+func Load(postPath string) (*Metadata, error) {
 
 	raw, err := ioutil.ReadFile(GetMetadataPath(postPath))
 	if err != nil {

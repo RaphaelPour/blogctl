@@ -52,9 +52,10 @@ var (
 
 func init() {
 
-	rootCmd.PersistentFlags().StringVar(
+	rootCmd.PersistentFlags().StringVarP(
 		&BlogPath,
 		"path",
+		"p",
 		DEFAULT_BLOG_PATH,
 		fmt.Sprintf("Path to blog content. Default: %s", DEFAULT_BLOG_PATH),
 	)

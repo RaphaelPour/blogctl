@@ -30,7 +30,7 @@ var initCmd = &cobra.Command{
 	Long:  "",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		if _, err := os.Stat(BlogPath); os.IsExist(err) {
+		if _, err := os.Stat(BlogPath); err == nil {
 			return fmt.Errorf("Blog environment already exists\n")
 		}
 

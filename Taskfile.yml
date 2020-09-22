@@ -18,3 +18,21 @@ tasks:
         sh: date '+%Y-%m-%dT%H:%M:%S%z'
       VERSION:
         sh: git describe --tags || git describe --always
+  bin-cov:
+    desc: Build coverage binary for integration tests
+    cmds:
+      - mkdir -p ci-build
+      - go test -coverpkg="./..." -c -tags main  -o ci-build/{{.BINARY_NAME}}.test
+  test:
+    desc: Run go test unittests
+    cmds:
+      - mkdir -p coverage
+      - go test -run "^Test[^_]" -v ./... -coverprofile=coverage/unittest_coverage.out -covermode=atomic
+  integration-test:
+    desc: Run integration tests
+    cmds:
+      - mkdir -p coverage
+      - gem install bundler
+      - bundle update --bundler
+      - bundler install
+      - bundler exec rspec spec.rb

@@ -2,7 +2,6 @@ GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.4.4)
-    memfs (1.0.0)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -21,8 +20,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  memfs
   rspec
 
 BUNDLED WITH
-   1.17.2
+   2.1.4

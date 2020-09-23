@@ -22,7 +22,7 @@ tasks:
     desc: Build coverage binary for integration tests
     cmds:
       - mkdir -p ci-build
-      - go test -coverpkg="./..." -c -tags main  -o ci-build/{{.BINARY_NAME}}.test
+      - go test -covermode=atomic -coverpkg="./..." -c -tags main  -o ci-build/{{.BINARY_NAME}}.test
   test:
     desc: Run go test unittests
     cmds:
@@ -32,7 +32,21 @@ tasks:
     desc: Run integration tests
     cmds:
       - mkdir -p coverage
-      - gem install bundler
-      - bundle update --bundler
-      - bundler install
       - bundler exec rspec spec.rb
+  
+  coverage:
+    desc: Generate coverage report
+    cmds:
+      - |
+        echo "mode: atomic" > coverage/total
+        grep "^github.com" -h coverage/*.out | sort >> coverage/total
+        go tool cover -html=coverage/total -o coverage/coverage.html
+  ci:
+    desc: Run ci tasks
+    cmds:
+      - task: lint
+      - task: bin-cov
+      - task: test
+      - task: integration-test
+      - task: coverage
+

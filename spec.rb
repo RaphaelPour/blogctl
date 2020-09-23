@@ -43,13 +43,11 @@ describe 'CLI' do
     end
 
     it 'fails to initializes a blog twice' do
-      _, _, status = blogctl("init -p #{blog_path}")
-      expect(status.success?).to be_truthy
+      blogctl("init -p #{blog_path}")
       expect(File.exist?(blog_path)).to be_truthy
       
-      _, err, status = blogctl("init -p #{blog_path}")
+      _, err, _ = blogctl("init -p #{blog_path}")
       expect(err).to match(/Blog environment already exists/)
-      expect(status.success?).to be_falsy
     end
   end
 end

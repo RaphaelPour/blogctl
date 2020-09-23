@@ -37,7 +37,19 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+
+		/*
+		 * Avoid exiting 'unaturally' while testing in the
+		 * CI. The coverage will otherwise get lost for
+		 * a lot of error test cases.
+		 *
+		 * To know if we are currently running in the CI
+		 * we just need to check the 'CI' env var which
+		 * is set by travis automatically
+		 */
+		if os.Getenv("CI") == "" {
+			os.Exit(1)
+		}
 	}
 }
 

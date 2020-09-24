@@ -30,7 +30,9 @@ var rootCmd = &cobra.Command{
 		if Version {
 			fmt.Println("BuildVersion: ", BuildVersion)
 			fmt.Println("BuildDate: ", BuildDate)
+			return
 		}
+		cmd.Help()
 	},
 }
 
@@ -63,7 +65,8 @@ var (
 )
 
 func init() {
-
+        rootCmd.SilenceErrors = true
+        rootCmd.SilenceUsage = true
 	rootCmd.PersistentFlags().StringVarP(
 		&BlogPath,
 		"path",

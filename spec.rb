@@ -18,6 +18,16 @@ describe 'CLI' do
       expect(out).to match(/BuildVersion:/)
       expect(out).to match(/BuildDate:/)
     end
+
+    it 'shows the help' do
+      out,err,_ = blogctl("")
+      expect(err).to eq ""
+      expect(out).to include 'Blogctl manages blog markdown-based posts'\
+                             ' database-less and generates a static website on-demand'
+      expect(out).to include 'Usage'
+      expect(out).to include 'Available Commands'
+      expect(out).to include 'Use "blogctl [command] --help" for more information about a command.'
+    end
   end
 
   context 'Basic test cases' do
@@ -43,11 +53,12 @@ describe 'CLI' do
     end
 
     it 'fails to initializes a blog twice' do
-      blogctl("init -p #{blog_path}")
+      out,_,_ = blogctl("init -p #{blog_path}")
+      expect(out).not_to match(/Blog environment already exists/)
       expect(File.exist?(blog_path)).to be_truthy
       
-      _, err, _ = blogctl("init -p #{blog_path}")
-      expect(err).to match(/Blog environment already exists/)
+      out, _, _ = blogctl("init -p #{blog_path}")
+      expect(out).to match(/Blog environment already exists/)
     end
   end
 end

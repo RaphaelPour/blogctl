@@ -12,7 +12,7 @@ func TestLoadMetadata(t *testing.T) {
 
 	/* Save example metadata json */
 	title := "99 diets that make you actually fatter"
-	date := 1234
+	date := int64(1234)
 	data := fmt.Sprintf(`{"title": "%s", "createdAt": %d}`,
 		title, date,
 	)
@@ -59,7 +59,7 @@ func TestSaveMetadata(t *testing.T) {
 
 	err = meta.Save(tmpDir)
 	require.Nil(t, err)
-	require.FileExists(t, GetMetadataPath(tmpDir)
+	require.FileExists(t, GetMetadataPath(tmpDir))
 }
 
 func TestMetadataFile(t *testing.T) {

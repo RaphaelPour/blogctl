@@ -26,13 +26,13 @@ var rootCmd = &cobra.Command{
 	Use:   "blogctl",
 	Short: "Static markdown blog backend",
 	Long:  "Blogctl manages blog markdown-based posts database-less and generates a static website on-demand",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if Version {
 			fmt.Println("BuildVersion: ", BuildVersion)
 			fmt.Println("BuildDate: ", BuildDate)
-			return
+			return nil
 		}
-		cmd.Help()
+		return cmd.Help()
 	},
 }
 
@@ -65,8 +65,8 @@ var (
 )
 
 func init() {
-        rootCmd.SilenceErrors = true
-        rootCmd.SilenceUsage = true
+	rootCmd.SilenceErrors = true
+	rootCmd.SilenceUsage = true
 	rootCmd.PersistentFlags().StringVarP(
 		&BlogPath,
 		"path",

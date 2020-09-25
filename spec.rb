@@ -19,7 +19,7 @@ describe 'CLI' do
       expect(out).to match(/BuildDate:/)
     end
 
-    it 'shows the help' do
+    it 'shows general help without any args' do
       out,err,_ = blogctl("")
       expect(err).to eq ""
       expect(out).to include 'Blogctl manages blog markdown-based posts'\
@@ -27,6 +27,16 @@ describe 'CLI' do
       expect(out).to include 'Usage'
       expect(out).to include 'Available Commands'
       expect(out).to include 'Use "blogctl [command] --help" for more information about a command.'
+    end
+
+    it 'shows post help without any subcommand' do
+      out,err,_ = blogctl("post")
+      expect(err).to eq ""
+      expect(out).to include("Manage posts")
+      expect(out).to include 'Usage'
+      expect(out).to include 'Available Commands'
+      expect(out).to include 'Use "blogctl post [command] --help" for more information about a command.'
+
     end
   end
 

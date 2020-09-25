@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"time"
 )
 
 /**
@@ -16,8 +15,8 @@ import (
  * a blog post.
  */
 type Metadata struct {
-	Title     string    `json:"title"`
-	CreatedAt time.Time `json:"createdAt"`
+	Title     string `json:"title"`
+	CreatedAt int64  `json:"createdAt"`
 }
 
 const METADATA_FILE = "metadata.json"

@@ -71,4 +71,27 @@ describe 'CLI' do
       expect(out).to match(/Blog environment already exists/)
     end
   end
+
+  context 'Post test cases' do
+
+    let (:blog_path) { "/tmp/blog#{rand 0..10_0000}" }
+    
+    before(:each) do
+      blogctl("init -p #{blog_path}")
+    end
+
+    after(:each) do
+      FileUtils.rm_rf(blog_path)
+    end
+
+    it 'fails to add a post without title' do
+      out, _, _ = blogctl("post add -p #{blog_path}")
+      expect(out).to match(/Title missing/)
+    end
+
+    it 'adds a post' do
+      out, _, _ = blogctl("post add --title 'test' -p #{blog_path}")
+      expect(out).to include "#{blog_path}/test/content.md"
+    end
+  end
 end

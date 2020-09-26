@@ -49,11 +49,19 @@ var addCmd = &cobra.Command{
 
 		/* Generate slug */
 		slug := slug(Title)
+		postPath := filepath.Join(BlogPath, slug)
 
 		/* Check if slug already exists */
 
 		/* Ask user for input */
 		content := fmt.Sprintf("# %s\n\n", Title)
+
+		/* Abort if file already exist to prevent data loss when checking
+		 * it afterwards.
+		 */
+		if _, err := os.Stat(postPath); err == nil {
+			return fmt.Errorf("Error adding new post '%s': File already exists", slug)
+		}
 
 		if Interactive {
 			err := Open(&content)
@@ -63,12 +71,13 @@ var addCmd = &cobra.Command{
 		}
 
 		/* Save post at the right place */
-		postPath := filepath.Join(BlogPath, slug)
 		if err := os.Mkdir(postPath, os.ModeDir|os.ModePerm); err != nil {
+			rescuePost(content)
 			return fmt.Errorf("Error creating post dir: %s", err)
 		}
 
 		if err := ioutil.WriteFile(GetContentFile(postPath), []byte(content), os.ModePerm); err != nil {
+			rescuePost(content)
 			return fmt.Errorf("Error writing post: %s", err)
 		}
 
@@ -78,6 +87,7 @@ var addCmd = &cobra.Command{
 			CreatedAt: time.Now().Unix(),
 		}
 		if err := metadata.Save(postPath); err != nil {
+			rescuePost(content)
 			return err
 		}
 
@@ -101,6 +111,10 @@ func init() {
 
 func slug(s string) string {
 	return SlugRegex.ReplaceAllString(strings.ReplaceAll(strings.ToLower(s), " ", "-"), "")
+}
+
+func rescuePost(content string) {
+	fmt.Printf("<<< POST\n%s\n>>> POST\n", content)
 }
 
 func Open(initialValue *string) error {

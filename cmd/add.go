@@ -18,7 +18,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -26,6 +25,8 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/spf13/cobra"
 
 	"github.com/RaphaelPour/blogctl/pkg/metadata"
 	"github.com/fatih/color"
@@ -105,8 +106,8 @@ var (
 func init() {
 	postCmd.AddCommand(addCmd)
 
-	addCmd.PersistentFlags().StringVarP(&Title, "title", "t", "", "Title of the post (required)")
-	addCmd.PersistentFlags().BoolVarP(&Interactive, "interactive", "i", false, "Opens default editor with new post.")
+	addCmd.Flags().StringVarP(&Title, "title", "t", "", "Title of the post (required)")
+	addCmd.Flags().BoolVarP(&Interactive, "interactive", "i", false, "Opens default editor with new post.")
 }
 
 func slug(s string) string {

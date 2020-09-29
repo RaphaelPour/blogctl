@@ -2,11 +2,11 @@ require 'rspec'
 require 'open3'
 require 'tmpdir'
 
-def blogctl(args)
+def blogctl(args, stdin: "")
   go_args = "ci-build/blogctl.test -test.run '^Test_'"\
     " -test.coverprofile=coverage/#{rand 0..10_000}.out"
 
-  Open3.capture3({'TEST_ARGS' =>  args}, go_args)
+  Open3.capture3({'TEST_ARGS' =>  args}, go_args, :stdin_data => stdin)
 end
 
 describe 'CLI' do
@@ -92,6 +92,20 @@ describe 'CLI' do
     it 'adds a post' do
       out, _, _ = blogctl("post add --title 'test' -p #{blog_path}")
       expect(out).to include "#{blog_path}/test/content.md"
+    end
+
+    it 'updates a post' do
+      blogctl("post add --title test -p #{blog_path}")
+
+      appendix = "I use RSpec to test my blog"
+      blogctl(
+        "post update --slug test -p #{blog_path} -a",
+        stdin: appendix
+      )
+
+      expect(File.read("#{blog_path}/test/content.md"))
+        .to include(appendix)
+
     end
   end
 end

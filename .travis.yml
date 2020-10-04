@@ -1,22 +1,27 @@
 language: go
-
 go:
-  - 1.13.x
-  - 1.14.x
-
+- 1.13.x
+- 1.14.x
 addons:
   apt:
     packages:
-      - rpm
-      - ruby-full
-
+    - rpm
+    - ruby-full
 env:
-  - GO111MODULE=on
-
+- GO111MODULE=on
 script:
-  - curl -Ls https://git.io/ttask.sh | sh
-  - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin
-  - gem install bundler
-  - bundle update --bundler
-  - bundler install
-  - ./bin/task ci
+- curl -Ls https://git.io/ttask.sh | sh
+- curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh |
+  sh -s -- -b $(go env GOPATH)/bin
+- gem install bundler
+- bundle update --bundler
+- bundler install
+- "./bin/task ci"
+deploy:
+  provider: releases
+  api_key:
+    secure: Q1+EjprTqgKeztTsODZ/gKmS3mDfVQ1TcNqooDybibAHRxYtxpL63mG6rdqyl4A5hLdnIDUbcSc3XA+tncS/pqTraRNni8YG/Ytlx8HBWEkldea5Fv+ORrr4nN24juQ/XvD5Wgv0w2+Bt9jNUAfYpuTajTiQGZxvodp/AwSp+3QZXCAC+xuMQjn+1BE4gaWpDKkFzHS5wu0LLSw2PzuEuID0z6oncJdx1SRMpdDPxJe8yOgiAD+NseiKyuk3KUM0/t0hwUS8J6jHq/WUqY3ogc6Bo2kbV6DrSEz5t/UwJawmTrqcSY+YN4wKrziY3BzJUDY0NXn3ilezmyAt63c8g287QD00w8fEVmMX/llBsfntyTMR/x84ktozU7DVUw/OCEWea8/fuDX18GGqap/22pF9XmVXP9mHDiJNC8zhMhDaI7pRj0sIBMdkjtnSg0on+StqgTEV54jOmwOk+opfuoLuXmUJr36M7hTk+XVzmS1m1oq0ETRro+pf6RdpCWtdOqghrwLgnJUBzny3tJAqB6K9sROkCxYRTuGsCNVtKLLHPtbNbctnEV2PcdCtjDnsVRGNYWN45bdJPAJpKgTsdBClfLj3dmtHVsZdM3z9StzKp2UtgsRvh7Zrkckck4yg9TvCMcBwAn/GvznSRN0S591nb7J+xbtTEzt+4TyTRQk=
+  file: ci-build/blogctl
+  on:
+    tags: true
+  skip_cleanup: 'true'

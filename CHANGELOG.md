@@ -1,8 +1,8 @@
-# For next release
+# Patch Release v0.1.1 (2020-10-04)
   * **Raphael Pour**
     * Add travis deployment
 
-*Not released yet*
+*Released by Raphael Pour <info@raphaelpour.de>*
 
 # Minor Release v0.1.0 (2020-10-04)
   * **Raphael Pour**

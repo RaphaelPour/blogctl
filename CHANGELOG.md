@@ -1,3 +1,9 @@
+# For next release
+  * **Raphael Pour**
+    * Update ci
+
+*Not released yet*
+
 # Patch Release v0.1.1 (2020-10-04)
   * **Raphael Pour**
     * Add travis deployment

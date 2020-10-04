@@ -17,6 +17,8 @@ script:
 - bundle update --bundler
 - bundler install
 - "./bin/task ci"
+- "./bin/task bin"
+
 deploy:
   provider: releases
   api_key:

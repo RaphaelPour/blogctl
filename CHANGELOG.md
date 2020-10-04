@@ -1,4 +1,4 @@
-# For next release
+# Minor Release v0.1.0 (2020-10-04)
   * **Raphael Pour**
     * Add commands:
       * Init
@@ -6,4 +6,4 @@
       * Update
       * Render
 
-*Not released yet*
+*Released by Raphael Pour <info@raphaelpour.de>*

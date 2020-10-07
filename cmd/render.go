@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/RaphaelPour/blogctl/pkg/metadata"
 	"github.com/gomarkdown/markdown"
@@ -31,7 +32,7 @@ import (
 type Post struct {
 	Content  string
 	Rendered template.HTML
-	Metadata *metadata.Metadata
+	Metadata map[string]string
 }
 
 // renderCmd represents the render command
@@ -89,7 +90,9 @@ var renderCmd = &cobra.Command{
 			rendered := markdown.ToHTML(content, nil, nil)
 
 			posts = append(posts, Post{
-				Metadata: metadata,
+				Metadata: map[string]string{
+					"CreatedAt": time.Unix(metadata.CreatedAt, 0).String(),
+				},
 				Content:  string(content),
 				Rendered: template.HTML(rendered),
 			})
@@ -129,9 +132,19 @@ const (
 	<head>
 		<meta charset="UTF-8">
 		<title>Blog</title>
+		<style>
+			h1 { margin:0px;}
+			.date { margin-top:10px;font-size: small; color: gray; }
+			.post { margin-top:10px;}
+		</style>
 	</head>
 	<body>
-		{{range .}}<div>{{ .Rendered }}</div>{{else}}<div><strong>no posts</strong></div>{{end}}
+		{{range .}}
+		<div class='post'>
+		<span class='date'>{{.Metadata.CreatedAt}}</span>
+		{{ .Rendered }}
+		</div>
+		{{else}}<div><strong>no posts</strong></div>{{end}}
 	</body>
 </html>`
 )

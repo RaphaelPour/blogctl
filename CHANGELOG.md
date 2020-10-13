@@ -1,3 +1,10 @@
+# For next release
+  * **Raphael Pour**
+    * **bugfix** Fix force and output flag
+      * Rendering: Add creation date to post
+
+*Not released yet*
+
 # Patch Release v0.1.2 (2020-10-04)
   * **Raphael Pour**
     * Update ci

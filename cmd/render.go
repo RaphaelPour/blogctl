@@ -157,7 +157,7 @@ var (
 func init() {
 	rootCmd.AddCommand(renderCmd)
 
-	rootCmd.Flags().StringVarP(
+	renderCmd.Flags().StringVarP(
 		&OutPath,
 		"out",
 		"o",
@@ -165,7 +165,7 @@ func init() {
 		"Output folder.",
 	)
 
-	rootCmd.Flags().BoolVarP(
+	renderCmd.Flags().BoolVarP(
 		&Force,
 		"force",
 		"f",

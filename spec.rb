@@ -105,7 +105,17 @@ describe 'CLI' do
 
       expect(File.read("#{blog_path}/test/content.md"))
         .to include(appendix)
+    end
 
+    it 'lists zero posts' do
+      out, _, _ = blogctl("list -p #{blog_path}")
+      expect(out).to match(/^Creation data\s*|\s*Title$/)
+    end
+
+    it 'lists one post' do
+      blogctl("post add --title test -p #{blog_path}")
+      out, _, _ = blogctl("list -p #{blog_path}")
+      expect(out).to match(/^.*|\s*test\s*$/)
     end
   end
 end

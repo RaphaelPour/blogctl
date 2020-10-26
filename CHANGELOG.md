@@ -1,7 +1,8 @@
 # For next release
   * **Raphael Pour**
     * **bugfix** Fix force and output flag
-      * Rendering: Add creation date to post
+    * Rendering: Add creation date to post
+    * Cmd: Add list command
 
 *Not released yet*
 

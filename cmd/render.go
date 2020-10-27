@@ -57,7 +57,6 @@ var renderCmd = &cobra.Command{
 
 		posts := make([]Post, 0)
 		for i, dir := range postDirs {
-			fmt.Printf("Processing post #%02d: %s\n", i, dir.Name())
 
 			if !dir.IsDir() {
 				continue
@@ -81,6 +80,13 @@ var renderCmd = &cobra.Command{
 			if err != nil {
 				return err
 			}
+
+			/* Overstep posts which aren't set to 'public' */
+			if metadata.Status != "public" {
+				continue
+			}
+
+			fmt.Printf("Rendering post #%02d: %s\n", i, dir.Name())
 
 			content, err := ioutil.ReadFile(GetContentFile(postPath))
 			if err != nil {

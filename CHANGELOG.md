@@ -3,6 +3,11 @@
     * **bugfix** Fix force and output flag
     * Rendering: Add creation date to post
     * Cmd: Add list command
+    * Add Status: 
+      * Track draft/public posts
+      * Only render public posts
+      * Add cmd draft/publish to set a post's state
+      * Adjust cmds to handle status properly
 
 *Not released yet*
 

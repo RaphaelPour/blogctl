@@ -115,7 +115,32 @@ describe 'CLI' do
     it 'lists one post' do
       blogctl("post add --title test -p #{blog_path}")
       out, _, _ = blogctl("list -p #{blog_path}")
-      expect(out).to match(/^.*|\s*test\s*$/)
+      expect(out).to match(/^.*|\s*draft\s*|\s*test\s*$/)
+    end
+
+    it 'publishs a post' do
+      blogctl("post add --title test -p #{blog_path}")
+      out, _, _ = blogctl("list -p #{blog_path}")
+      expect(out).to match(/^.*|\s*draft\s*|\s*test\s*$/)
+
+      blogctl("post publish -p #{blog_path} --slug test")
+
+      out, _, _ = blogctl("list -p #{blog_path}")
+      expect(out).to match(/^.*|\s*public\s*|\s*test\s*$/)
+    end
+
+    it 'drafts a post again' do
+      blogctl("post add --title test -p #{blog_path}")
+      out, _, _ = blogctl("list -p #{blog_path}")
+      blogctl("post publish -p #{blog_path} --slug test")
+
+      out, _, _ = blogctl("list -p #{blog_path}")
+      expect(out).to match(/^.*|\s*public\s*|\s*test\s*$/)
+
+      blogctl("post draft -p #{blog_path} --slug test")
+
+      out, _, _ = blogctl("list -p #{blog_path}")
+      expect(out).to match(/^.*|\s*draft\s*|\s*test\s*$/)
     end
   end
 end

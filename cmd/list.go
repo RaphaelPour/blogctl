@@ -37,8 +37,8 @@ var listCmd = &cobra.Command{
 			return fmt.Errorf("Error reading blog path: %s", err)
 		}
 
-		fmt.Println("Creation date                  | Title")
-		fmt.Println("-------------------------------+---------------")
+		fmt.Println("Creation date                  | Status  |Title")
+		fmt.Println("-------------------------------+---------+---------------")
 
 		for _, dir := range postDirs {
 			if !dir.IsDir() {
@@ -64,8 +64,9 @@ var listCmd = &cobra.Command{
 				return err
 			}
 
-			fmt.Printf("%s | %s\n",
+			fmt.Printf("%s | %-6s | %s\n",
 				time.Unix(metadata.CreatedAt, 0).String(),
+				metadata.Status,
 				metadata.Title,
 			)
 

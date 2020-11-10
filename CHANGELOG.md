@@ -1,4 +1,4 @@
-# For next release
+# Patch Release v0.1.3 (2020-11-10)
   * **Raphael Pour**
     * **bugfix** Fix force and output flag
     * Rendering: Add creation date to post
@@ -9,7 +9,7 @@
       * Add cmd draft/publish to set a post's state
       * Adjust cmds to handle status properly
 
-*Not released yet*
+*Released by Raphael Pour <info@raphaelpour.de>*
 
 # Patch Release v0.1.2 (2020-10-04)
   * **Raphael Pour**

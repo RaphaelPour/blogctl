@@ -1,0 +1,38 @@
+builds:
+  binary: blogctl
+  main: main.go
+  ldflags:
+    - >
+      -s -w
+      -X github.com/RaphaelPour/blogctl/cmd.BuildDate={{.Date}} 
+      -X github.com/RaphaelPour/blogctl/cmd.BuildVersion={{.Version}}
+  env:
+    - CGO_ENABLED=0
+  goos:
+    - linux
+    - darwin
+  goarch:
+    - amd64
+
+archives:
+  - name_template: "{{.Binary}}_{{.Os}}_{{.Arch}}"
+
+release:
+  draft: true
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+checksum:
+  name_template: 'blogctl_checksums.txt'
+
+nfpms:
+  - vendor: Blogctl
+    homepage: https://github.com/RaphaelPour/blogctl
+    maintainer: Raphael Pour <info@raphaelpour.de>
+    description: Static markdown blog backend as a binary
+    license: GPLv3
+    formats:
+      - deb
+      - rpm
+    file_name_template: "{{.ProjectName}}_{{.Os}}_{{.Arch}}"

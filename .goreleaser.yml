@@ -1,4 +1,4 @@
-builds:
+build:
   binary: blogctl
   main: main.go
   ldflags:

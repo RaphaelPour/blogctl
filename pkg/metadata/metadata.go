@@ -16,7 +16,7 @@ import (
  */
 type Metadata struct {
 	Title     string `json:"title"`
-	Status    string `json:"string"`
+	Status    string `json:"status"`
 	CreatedAt int64  `json:"createdAt"`
 }
 

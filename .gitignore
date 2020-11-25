@@ -9,3 +9,6 @@ ci-build/
 blog/
 coverage/
 out/
+
+# Ignore bin folder in travis deployment stage
+bin/

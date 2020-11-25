@@ -149,6 +149,7 @@ const (
 		<div class='post'>
 		<span class='date'>{{.Metadata.CreatedAt}}</span>
 		{{ .Rendered }}
+		<hr>
 		</div>
 		{{else}}<div><strong>no posts</strong></div>{{end}}
 	</body>

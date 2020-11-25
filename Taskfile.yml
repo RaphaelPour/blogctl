@@ -13,7 +13,7 @@ tasks:
   bin:
     desc: Build the go binary
     cmds:
-      - go build -a -ldflags "-X {{.PATH}}/cmd.BuildDate={{.DATE}} -X {{.PATH}}/cmd.BuildVersion={{.VERSION}} -extldflags '-static' -s -w" -o ci-build/{{.BINARY_NAME}}
+      - CGO_ENABLED=0 go build -a -ldflags "-X {{.PATH}}/cmd.BuildDate={{.DATE}} -X {{.PATH}}/cmd.BuildVersion={{.VERSION}} -extldflags '-static' -s -w" -o ci-build/{{.BINARY_NAME}}
     vars:
       DATE:
         sh: date '+%Y-%m-%dT%H:%M:%S%z'

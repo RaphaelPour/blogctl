@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sort"
 	"time"
 
 	"github.com/RaphaelPour/blogctl/pkg/metadata"
@@ -30,9 +31,11 @@ import (
 )
 
 type Post struct {
-	Content  string
-	Rendered template.HTML
-	Metadata map[string]string
+	Timestamp int64
+	CreatedAt string
+	Content   string
+	Rendered  template.HTML
+	Metadata  map[string]string
 }
 
 // renderCmd represents the render command
@@ -95,12 +98,12 @@ var renderCmd = &cobra.Command{
 
 			rendered := markdown.ToHTML(content, nil, nil)
 
+			timestamp := time.Unix(metadata.CreatedAt, 0)
 			posts = append(posts, Post{
-				Metadata: map[string]string{
-					"CreatedAt": time.Unix(metadata.CreatedAt, 0).String(),
-				},
-				Content:  string(content),
-				Rendered: template.HTML(rendered),
+				Timestamp: timestamp.Unix(),
+				CreatedAt: timestamp.String(),
+				Content:   string(content),
+				Rendered:  template.HTML(rendered),
 			})
 		}
 
@@ -116,6 +119,11 @@ var renderCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("Error creating index file: %s", err)
 		}
+
+		/* Sort posts */
+		sort.Slice(posts, func(i, j int) bool {
+			return posts[i].Timestamp > posts[j].Timestamp
+		})
 
 		if err := t.Execute(file, posts); err != nil {
 			return fmt.Errorf("Error rendering posts: %s", err)
@@ -147,7 +155,7 @@ const (
 	<body>
 		{{range .}}
 		<div class='post'>
-		<span class='date'>{{.Metadata.CreatedAt}}</span>
+		<span class='date'>{{.CreatedAt}}</span>
 		{{ .Rendered }}
 		<hr>
 		</div>

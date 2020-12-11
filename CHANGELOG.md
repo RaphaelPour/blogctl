@@ -1,3 +1,11 @@
+# For next release
+  * **Raphael Pour**
+    * - **bugfix** Metadata: Fix typo in status key
+    * - Render: Separate posts with <hr>
+    * - Render: Sort post from latest to oldest
+
+*Not released yet*
+
 # Patch Release v0.1.3 (2020-11-10)
   * **Raphael Pour**
     * **bugfix** Fix force and output flag

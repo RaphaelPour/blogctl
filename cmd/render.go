@@ -31,6 +31,8 @@ import (
 )
 
 type Post struct {
+	Title     string
+	Link      string
 	Timestamp int64
 	CreatedAt string
 	Content   string
@@ -99,16 +101,43 @@ var renderCmd = &cobra.Command{
 			rendered := markdown.ToHTML(content, nil, nil)
 
 			timestamp := time.Unix(metadata.CreatedAt, 0)
-			posts = append(posts, Post{
+			postFileName := fmt.Sprintf(
+				POST_FILE_TEMPLATE,
+				slug(metadata.Title),
+			)
+			post := Post{
+				Title:     metadata.Title,
+				Link:      postFileName,
 				Timestamp: timestamp.Unix(),
 				CreatedAt: timestamp.String(),
 				Content:   string(content),
 				Rendered:  template.HTML(rendered),
-			})
+			}
+			posts = append(posts, post)
+
+			/* Render single post */
+			postTemplate, err := template.New("post").Parse(POST_TEMPLATE)
+			if err != nil {
+				return fmt.Errorf("Error creating post file '%s': %s", metadata.Title, err)
+			}
+
+			postFilePath := filepath.Join(OutPath, postFileName)
+			file, err := os.Create(postFilePath)
+			if err != nil {
+				return fmt.Errorf("Error creating post file '%s': %s", metadata.Title, err)
+			}
+
+			if err := postTemplate.Execute(file, post); err != nil {
+				return fmt.Errorf("Error rendering post '%s': %s", metadata.Title, err)
+			}
+
+			if err := file.Close(); err != nil {
+				return fmt.Errorf("Error closing post file '%s': %s", metadata.Title, err)
+			}
 		}
 
 		/* Put everything together */
-		t, err := template.New("blog").Parse(TEMPLATE)
+		t, err := template.New("blog").Parse(INDEX_TEMPLATE)
 		if err != nil {
 			return fmt.Errorf("Error parsing the html template: %s", err)
 		}
@@ -138,9 +167,10 @@ var renderCmd = &cobra.Command{
 }
 
 const (
-	DEFAULT_OUT_PATH = "./out/"
-	INDEX_FILE       = "index.html"
-	TEMPLATE         = `
+	DEFAULT_OUT_PATH   = "./out/"
+	INDEX_FILE         = "index.html"
+	POST_FILE_TEMPLATE = "%s.html"
+	INDEX_TEMPLATE     = `
 <!DOCTYPE html>
 <html>
 	<head>
@@ -153,13 +183,33 @@ const (
 		</style>
 	</head>
 	<body>
+		<ul>
 		{{range .}}
+		<li>
+		  <span class='date'>[{{.CreatedAt}}]</span>
+			<a href='{{ .Link }}'>{{ .Title }}</a>
+		</li>
+		{{else}}<li><strong>no posts</strong></li>{{end}}
+		</ul>
+	</body>
+</html>`
+	POST_TEMPLATE = `
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Blog</title>
+		<style>
+			h1 { margin:0px;}
+			.date { margin-top:10px;font-size: small; color: gray; }
+			.post { margin-top:10px;}
+		</style>
+	</head>
+	<body>
 		<div class='post'>
-		<span class='date'>{{.CreatedAt}}</span>
-		{{ .Rendered }}
-		<hr>
+			<span class='date'>{{.CreatedAt}}</span>
+			{{ .Rendered }}
 		</div>
-		{{else}}<div><strong>no posts</strong></div>{{end}}
 	</body>
 </html>`
 )

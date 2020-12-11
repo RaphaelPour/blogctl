@@ -3,6 +3,7 @@
     * - **bugfix** Metadata: Fix typo in status key
     * - Render: Separate posts with <hr>
     * - Render: Sort post from latest to oldest
+    * Render: Change from single- to multi-page site
 
 *Not released yet*
 

@@ -178,6 +178,7 @@ const (
 		<title>Blog</title>
 		<style>
 			h1 { margin:0px;}
+			pre { width:100%;overflow:auto}
 			.date { margin-top:10px;font-size: small; color: gray; }
 			.post { margin-top:10px;}
 		</style>

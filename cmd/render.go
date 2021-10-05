@@ -27,6 +27,7 @@ import (
 
 	"github.com/RaphaelPour/blogctl/pkg/metadata"
 	"github.com/gomarkdown/markdown"
+	"github.com/gorilla/feeds"
 	"github.com/spf13/cobra"
 )
 
@@ -47,6 +48,14 @@ var renderCmd = &cobra.Command{
 	Long:  "Collects all posts and renders the markdown using the metadata as static website",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
+		feed := &feeds.Feed{
+			Title:       "evilcookie.de",
+			Link:        &feeds.Link{Href: "https://evilcookie.de"},
+			Description: "drunken stack developer",
+			Author:      &feeds.Author{Name: "Raphael Pour"},
+			Created:     time.Now(),
+		}
+
 		if _, err := os.Stat(OutPath); !os.IsNotExist(err) && !Force {
 			return fmt.Errorf("Output folder already exists")
 		}
@@ -60,6 +69,7 @@ var renderCmd = &cobra.Command{
 			return fmt.Errorf("Error reading blog path: %s", err)
 		}
 
+		feed.Items = make([]*feeds.Item, 0)
 		posts := make([]Post, 0)
 		for i, dir := range postDirs {
 
@@ -134,6 +144,19 @@ var renderCmd = &cobra.Command{
 			if err := file.Close(); err != nil {
 				return fmt.Errorf("Error closing post file '%s': %s", metadata.Title, err)
 			}
+
+			feed.Items = append(feed.Items, &feeds.Item{
+				Title:   metadata.Title,
+				Content: string(post.Rendered),
+				Link: &feeds.Link{
+					Href: fmt.Sprintf(
+						"https://evilcookie.de/%s.html",
+						slug(metadata.Title),
+					),
+				},
+				Author:  &feeds.Author{Name: "Raphael Pour"},
+				Created: timestamp,
+			})
 		}
 
 		/* Put everything together */
@@ -162,6 +185,16 @@ var renderCmd = &cobra.Command{
 			return fmt.Errorf("Error closing file: %s", err)
 		}
 
+		rss, err := feed.ToRss()
+		if err != nil {
+			return fmt.Errorf("Error generating rss feed: %w", err)
+		}
+
+		rssPath := filepath.Join(OutPath, "rss.xml")
+		if err := ioutil.WriteFile(rssPath, []byte(rss), 0777); err != nil {
+			return fmt.Errorf("Error writing rss.xml: %w", err)
+		}
+
 		return nil
 	},
 }
@@ -176,6 +209,7 @@ const (
 	<head>
 		<meta charset="UTF-8">
 		<title>Blog</title>
+		<link rel="alternate" type="application/rss+xml" title="Feed" href="/rss.xml">
 		<style>
 			h1 { margin:0px;}
 			pre { width:100%;overflow:auto}
@@ -192,6 +226,7 @@ const (
 		</li>
 		{{else}}<li><strong>no posts</strong></li>{{end}}
 		</ul>
+		<a href='rss.xml'>RSS</a>
 	</body>
 </html>`
 	POST_TEMPLATE = `

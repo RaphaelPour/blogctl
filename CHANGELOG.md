@@ -5,6 +5,7 @@
     * Render: Sort post from latest to oldest
     * Render: Change from single- to multi-page site
     * Render: Fix code width
+    * Render: Generate RSS feed
 
 *Not released yet*
 

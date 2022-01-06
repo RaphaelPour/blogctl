@@ -1,11 +1,13 @@
 # For next release
   * **Raphael Pour**
     * **bugfix** Metadata: Fix typo in status key
-    * Render: Separate posts with `<hr>`
-    * Render: Sort post from latest to oldest
-    * Render: Change from single- to multi-page site
-    * Render: Fix code width
-    * Render: Generate RSS feed
+    * render: 
+      * separate posts with `<hr>`
+      * sort post from latest to oldest
+      * change from single- to multi-page site
+      * fix code width
+      * generate rss feed
+      * add image support
 
 *Not released yet*
 

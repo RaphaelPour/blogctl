@@ -19,9 +19,11 @@ package cmd
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"time"
 
@@ -83,7 +85,7 @@ var renderCmd = &cobra.Command{
 				return fmt.Errorf("Error reading post path of %s: %s", postPath, err)
 			}
 
-			if len(files) != 2 {
+			if len(files) < 2 {
 				return fmt.Errorf(
 					"Unexpected count of files in post path %s. Found: %d",
 					postPath,
@@ -110,6 +112,18 @@ var renderCmd = &cobra.Command{
 
 			rendered := markdown.ToHTML(content, nil, nil)
 
+			/* replace all IMAGE(<filename>) with valid path to filename */
+			re := regexp.MustCompile(`IMAGE\(([\w\.]+)\)`)
+			renderedStr := re.ReplaceAllString(string(rendered), fmt.Sprintf(`<img src="%s_$1"/>`, slug(metadata.Title)))
+
+			for _, file := range re.FindAllStringSubmatch(string(rendered), -1) {
+				src := fmt.Sprintf("%s%s/%s", BlogPath, slug(metadata.Title), file[1])
+				dst := fmt.Sprintf("%s%s_%s", OutPath, slug(metadata.Title), file[1])
+				if err := copyFile(src, dst); err != nil {
+					return fmt.Errorf("error copying '%s' to '%s': %w", src, dst, err)
+				}
+			}
+
 			timestamp := time.Unix(metadata.CreatedAt, 0)
 			postFileName := fmt.Sprintf(
 				POST_FILE_TEMPLATE,
@@ -120,8 +134,8 @@ var renderCmd = &cobra.Command{
 				Link:      postFileName,
 				Timestamp: timestamp.Unix(),
 				CreatedAt: timestamp.String(),
-				Content:   string(content),
-				Rendered:  template.HTML(rendered),
+				Content:   renderedStr,
+				Rendered:  template.HTML(renderedStr),
 			}
 			posts = append(posts, post)
 
@@ -197,6 +211,26 @@ var renderCmd = &cobra.Command{
 
 		return nil
 	},
+}
+
+func copyFile(sourceFile, destinationFile string) error {
+	src, err := os.Open(sourceFile)
+	if err != nil {
+		return fmt.Errorf("error open source file %s: %w", sourceFile, err)
+	}
+	defer src.Close()
+
+	dst, err := os.Create(destinationFile)
+	if err != nil {
+		return fmt.Errorf("error open destination file %s: %w", destinationFile, err)
+	}
+	defer dst.Close()
+
+	_, err = io.Copy(dst, src)
+	if err != nil {
+		return fmt.Errorf("error copying file: %w", err)
+	}
+	return nil
 }
 
 const (

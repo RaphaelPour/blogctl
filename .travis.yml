@@ -25,9 +25,7 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: 
-      - git reset --hard 
-      - curl -sL http://git.io/goreleaser | bash
+    script: git reset --hard && curl -sL http://git.io/goreleaser | bash
     on:
       tags: true
       condition: $TRAVIS_OS_NAME = linux

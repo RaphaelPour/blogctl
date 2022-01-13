@@ -118,8 +118,8 @@ var renderCmd = &cobra.Command{
 			renderedStr := re.ReplaceAllString(string(rendered), fmt.Sprintf(`<img src="%s_$1"/>`, slugTitle))
 
 			for _, file := range re.FindAllStringSubmatch(string(rendered), -1) {
-				src := fmt.Sprintf("%s%s/%s", BlogPath, slugTitle, file[1])
-				dst := fmt.Sprintf("%s%s_%s", OutPath, slugTitle, file[1])
+				src := filepath.Join(BlogPath, fmt.Sprintf("%s/%s", slugTitle, file[1]))
+				dst := filepath.Join(OutPath, fmt.Sprintf("%s_%s", slugTitle, file[1]))
 				if err := copyFile(src, dst); err != nil {
 					return fmt.Errorf("error copying '%s' to '%s': %w", src, dst, err)
 				}

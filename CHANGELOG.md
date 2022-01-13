@@ -1,4 +1,4 @@
-# For next release
+# Minor Release v0.2.0 (2022-01-13)
   * **Raphael Pour**
     * **bugfix** metadata: fix typo in status key
     * render: 
@@ -9,7 +9,7 @@
       * generate rss feed
       * add image support
 
-*Not released yet*
+*Released by Raphael Pour <info@raphaelpour.de>*
 
 # Patch Release v0.1.3 (2020-11-10)
   * **Raphael Pour**

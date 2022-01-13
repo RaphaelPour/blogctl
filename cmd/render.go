@@ -104,6 +104,7 @@ var renderCmd = &cobra.Command{
 			}
 
 			fmt.Printf("Rendering post #%02d: %s\n", i, dir.Name())
+			slugTitle := slug(metadata.Title)
 
 			content, err := ioutil.ReadFile(GetContentFile(postPath))
 			if err != nil {
@@ -114,11 +115,11 @@ var renderCmd = &cobra.Command{
 
 			/* replace all IMAGE(<filename>) with valid path to filename */
 			re := regexp.MustCompile(`IMAGE\(([\w\.]+)\)`)
-			renderedStr := re.ReplaceAllString(string(rendered), fmt.Sprintf(`<img src="%s_$1"/>`, slug(metadata.Title)))
+			renderedStr := re.ReplaceAllString(string(rendered), fmt.Sprintf(`<img src="%s_$1"/>`, slugTitle))
 
 			for _, file := range re.FindAllStringSubmatch(string(rendered), -1) {
-				src := fmt.Sprintf("%s%s/%s", BlogPath, slug(metadata.Title), file[1])
-				dst := fmt.Sprintf("%s%s_%s", OutPath, slug(metadata.Title), file[1])
+				src := fmt.Sprintf("%s%s/%s", BlogPath, slugTitle, file[1])
+				dst := fmt.Sprintf("%s%s_%s", OutPath, slugTitle, file[1])
 				if err := copyFile(src, dst); err != nil {
 					return fmt.Errorf("error copying '%s' to '%s': %w", src, dst, err)
 				}
@@ -127,7 +128,7 @@ var renderCmd = &cobra.Command{
 			timestamp := time.Unix(metadata.CreatedAt, 0)
 			postFileName := fmt.Sprintf(
 				POST_FILE_TEMPLATE,
-				slug(metadata.Title),
+				slugTitle,
 			)
 			post := Post{
 				Title:     metadata.Title,
@@ -165,7 +166,7 @@ var renderCmd = &cobra.Command{
 				Link: &feeds.Link{
 					Href: fmt.Sprintf(
 						"https://evilcookie.de/%s.html",
-						slug(metadata.Title),
+						slugTitle,
 					),
 				},
 				Author:  &feeds.Author{Name: "Raphael Pour"},

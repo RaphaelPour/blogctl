@@ -1,6 +1,6 @@
 # For next release
   * **Raphael Pour**
-    * **bugfix** Metadata: Fix typo in status key
+    * **bugfix** metadata: fix typo in status key
     * render: 
       * separate posts with `<hr>`
       * sort post from latest to oldest

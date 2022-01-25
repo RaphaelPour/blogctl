@@ -1,3 +1,9 @@
+# For next release
+  * **Raphael Pour**
+    * render: add navigation with previous+next post and home
+
+*Not released yet*
+
 # Minor Release v0.2.0 (2022-01-13)
   * **Raphael Pour**
     * **bugfix** metadata: fix typo in status key

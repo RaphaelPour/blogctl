@@ -34,13 +34,16 @@ import (
 )
 
 type Post struct {
-	Title     string
-	Link      string
-	Timestamp int64
-	CreatedAt string
-	Content   string
-	Rendered  template.HTML
-	Metadata  map[string]string
+	Title            string
+	Link             string
+	PreviousPostLink string
+	NextPostLink     string
+	HomeLink         string
+	Timestamp        int64
+	CreatedAt        string
+	Content          string
+	Rendered         template.HTML
+	Metadata         map[string]string
 }
 
 // renderCmd represents the render command
@@ -133,44 +136,64 @@ var renderCmd = &cobra.Command{
 			post := Post{
 				Title:     metadata.Title,
 				Link:      postFileName,
+				HomeLink:  INDEX_FILE,
 				Timestamp: timestamp.Unix(),
 				CreatedAt: timestamp.String(),
 				Content:   renderedStr,
 				Rendered:  template.HTML(renderedStr),
 			}
 			posts = append(posts, post)
+		}
 
+		/* Sort posts */
+		sort.Slice(posts, func(i, j int) bool {
+			return posts[i].Timestamp > posts[j].Timestamp
+		})
+
+		/* set previous/next post of any post */
+		for i := 0; i < len(posts); i++ {
+			if i-1 >= 0 {
+				posts[i].NextPostLink = posts[i-1].Link
+			}
+
+			if i+1 < len(posts) {
+				posts[i].PreviousPostLink = posts[i+1].Link
+			}
+		}
+
+		/* render all posts */
+		for _, post := range posts {
 			/* Render single post */
 			postTemplate, err := template.New("post").Parse(POST_TEMPLATE)
 			if err != nil {
-				return fmt.Errorf("Error creating post file '%s': %s", metadata.Title, err)
+				return fmt.Errorf("Error creating post file '%s': %s", post.Title, err)
 			}
 
-			postFilePath := filepath.Join(OutPath, postFileName)
+			postFilePath := filepath.Join(OutPath, post.Link)
 			file, err := os.Create(postFilePath)
 			if err != nil {
-				return fmt.Errorf("Error creating post file '%s': %s", metadata.Title, err)
+				return fmt.Errorf("Error creating post file '%s': %s", post.Title, err)
 			}
 
 			if err := postTemplate.Execute(file, post); err != nil {
-				return fmt.Errorf("Error rendering post '%s': %s", metadata.Title, err)
+				return fmt.Errorf("Error rendering post '%s': %s", post.Title, err)
 			}
 
 			if err := file.Close(); err != nil {
-				return fmt.Errorf("Error closing post file '%s': %s", metadata.Title, err)
+				return fmt.Errorf("Error closing post file '%s': %s", post.Title, err)
 			}
 
 			feed.Items = append(feed.Items, &feeds.Item{
-				Title:   metadata.Title,
+				Title:   post.Title,
 				Content: string(post.Rendered),
 				Link: &feeds.Link{
 					Href: fmt.Sprintf(
 						"https://evilcookie.de/%s.html",
-						slugTitle,
+						slug(post.Title),
 					),
 				},
 				Author:  &feeds.Author{Name: "Raphael Pour"},
-				Created: timestamp,
+				Created: time.Unix(post.Timestamp, 0),
 			})
 		}
 
@@ -186,11 +209,6 @@ var renderCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("Error creating index file: %s", err)
 		}
-
-		/* Sort posts */
-		sort.Slice(posts, func(i, j int) bool {
-			return posts[i].Timestamp > posts[j].Timestamp
-		})
 
 		if err := t.Execute(file, posts); err != nil {
 			return fmt.Errorf("Error rendering posts: %s", err)
@@ -278,6 +296,15 @@ const (
 	</head>
 	<body>
 		<div class='post'>
+			{{if .PreviousPostLink}}
+			<a href='{{.PreviousPostLink}}'>&lt;</a>
+			{{end}}
+			<a href='{{.HomeLink}}'>up</a>
+			{{if .NextPostLink}}
+			<a href='{{.NextPostLink}}'>&gt;</a>
+			{{end}}
+			</br>
+
 			<span class='date'>{{.CreatedAt}}</span>
 			{{ .Rendered }}
 		</div>

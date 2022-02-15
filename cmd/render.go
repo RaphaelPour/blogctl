@@ -271,6 +271,9 @@ const (
 		</style>
 	</head>
 	<body>
+	<h2>evilcookie</h2>
+		Hi, I'm Raphael. I write about my software developer journey.
+		You can find my stuff on <a href='https://github.com/RaphaelPour'>github</a>.
 		<ul>
 		{{range .}}
 		<li>

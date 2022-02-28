@@ -15,10 +15,10 @@ func renderHook(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool
 	}
 
 	// get the language of the code from the top of the code-block
-	codeLanguage := string(node.(*ast.CodeBlock).Info[:])
+	codeLanguage := string(node.(*ast.CodeBlock).Info)
 
 	// get the raw code from the node
-	rawCode := string(node.AsLeaf().Literal[:])
+	rawCode := string(node.AsLeaf().Literal)
 	highlightedCode, _ := highlight.HTML(codeLanguage, []byte(rawCode))
 
 	// write the highlighted code

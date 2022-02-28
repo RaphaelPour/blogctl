@@ -20,5 +20,5 @@ func TestRenderer(t *testing.T) {
 		"```"
 	result := markdown.ToHTML([]byte(text), nil, renderer)
 	expected := "<div class=\"highlight\"><pre><code><span class=\"keyword\">func</span> main() {\n\tfmt.Println(<span class=\"string\">&#39;Test %d&#39;</span>, <span class=\"number\">3</span>)\n\t<span class=\"comment\">// Comment</span>\n}\n</code></pre></div>"
-	require.Equal(t, expected, string(result[:]))
+	require.Equal(t, expected, string(result))
 }

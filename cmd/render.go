@@ -27,6 +27,7 @@ import (
 	"sort"
 	"time"
 
+	"github.com/RaphaelPour/blogctl/pkg/highlighter"
 	"github.com/RaphaelPour/blogctl/pkg/metadata"
 	"github.com/gomarkdown/markdown"
 	"github.com/gorilla/feeds"
@@ -114,7 +115,8 @@ var renderCmd = &cobra.Command{
 				return fmt.Errorf("Error reading post content %s: %s", postPath, err)
 			}
 
-			rendered := markdown.ToHTML(content, nil, nil)
+			renderer := highlighter.GetRenderer()
+			rendered := markdown.ToHTML(content, nil, renderer)
 
 			/* replace all IMAGE(<filename>) with valid path to filename */
 			re := regexp.MustCompile(`IMAGE\(([\w\.]+)\)`)
@@ -295,6 +297,11 @@ const (
 			h1 { margin:0px;}
 			.date { margin-top:10px;font-size: small; color: gray; }
 			.post { margin-top:10px;}
+			.keyword { font-weight: bold; }
+			.string { color: #494949 }
+			.number { color: #565656 }
+			.comment { color: #838383; font-style: italic; }
+			 pre { min-width: 20ex; max-width: 100ex; padding: 10px 10px 10px 5px; background-color: #EEEEEE; border-radius: 3px; }
 		</style>
 	</head>
 	<body>

@@ -22,7 +22,10 @@ func renderHook(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool
 	highlightedCode, _ := highlight.HTML(codeLanguage, []byte(rawCode))
 
 	// write the highlighted code
-	w.Write(highlightedCode)
+	_, err := w.Write(highlightedCode)
+	if err != nil {
+		return ast.Terminate, false
+	}
 	return ast.GoToNext, true
 }
 

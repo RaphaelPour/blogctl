@@ -60,7 +60,6 @@ tasks:
   ci:
     desc: Run ci tasks
     cmds:
-      - task: lint
       - task: bin-cov
       - task: test
       - task: integration-test

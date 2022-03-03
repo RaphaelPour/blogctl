@@ -1,0 +1,32 @@
+name: hcloud-ruby ci
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - uses: actions/setup-ruby@v1
+        with:
+            ruby-version: '2.7'
+      - name: install task
+        run: curl -Ls https://git.io/ttask.sh | sh
+      - name: install bundler
+        run: |
+             gem install bundler
+             bundle update --bundler
+             bundler install
+      - name: run tests
+        run: ./bin/task ci
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: install task
+        run: curl -Ls https://git.io/ttask.sh | sh
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+      - name: run linter
+        run: ./bin/task lint

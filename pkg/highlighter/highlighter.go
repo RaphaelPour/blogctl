@@ -1,9 +1,12 @@
 package highlighter
 
 import (
+	"bytes"
 	"io"
 
-	"github.com/d4l3k/go-highlight"
+	htmlFormatter "github.com/alecthomas/chroma/formatters/html"
+	"github.com/alecthomas/chroma/lexers"
+	"github.com/alecthomas/chroma/styles"
 	"github.com/gomarkdown/markdown/ast"
 	"github.com/gomarkdown/markdown/html"
 )
@@ -16,16 +19,21 @@ func renderHook(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool
 
 	// get the language of the code from the top of the code-block
 	codeLanguage := string(node.(*ast.CodeBlock).Info)
+	lexer := lexers.Get(codeLanguage)
+	if lexer == nil {
+		lexer = lexers.Fallback
+	}
+
+	formatter := htmlFormatter.New(htmlFormatter.WithClasses(true))
 
 	// get the raw code from the node
 	rawCode := string(node.AsLeaf().Literal)
-	highlightedCode, _ := highlight.HTML(codeLanguage, []byte(rawCode))
-
-	// write the highlighted code
-	_, err := w.Write(highlightedCode)
+	iterator, err := lexer.Tokenise(nil, rawCode)
+	err = formatter.Format(w, styles.AlgolNu, iterator)
 	if err != nil {
 		return ast.Terminate, false
 	}
+
 	return ast.GoToNext, true
 }
 
@@ -38,4 +46,19 @@ func GetRenderer() *html.Renderer {
 	}
 
 	return html.NewRenderer(opts)
+}
+
+func GetStyle() (string, error) {
+	formatter := htmlFormatter.New(htmlFormatter.WithClasses(true))
+	style := styles.Get("algol_nu")
+	if style == nil {
+		style = styles.Fallback
+	}
+	var buf bytes.Buffer
+	err := formatter.WriteCSS(&buf, style)
+	if err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }

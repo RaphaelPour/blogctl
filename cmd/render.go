@@ -297,11 +297,8 @@ const (
 			h1 { margin:0px;}
 			.date { margin-top:10px;font-size: small; color: gray; }
 			.post { margin-top:10px;}
-			.keyword { font-weight: bold; }
-			.string { color: #494949 }
-			.number { color: #565656 }
-			.comment { color: #838383; font-style: italic; }
-			 pre { min-width: 20ex; max-width: 100ex; padding: 10px 10px 10px 5px; background-color: #EEEEEE; border-radius: 3px; }
+			<!-- GENERATE CODE HIGHLIGHTING STYLE HERE -->
+			pre { min-width: 20ex; max-width: 100ex; padding: 10px 10px 10px 5px; background-color: #EEEEEE; border-radius: 3px; }
 		</style>
 	</head>
 	<body>

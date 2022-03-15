@@ -29,6 +29,10 @@ func renderHook(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool
 	// get the raw code from the node
 	rawCode := string(node.AsLeaf().Literal)
 	iterator, err := lexer.Tokenise(nil, rawCode)
+	if err != nil {
+		return ast.Terminate, false
+	}
+
 	err = formatter.Format(w, styles.AlgolNu, iterator)
 	if err != nil {
 		return ast.Terminate, false

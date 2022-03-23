@@ -1,4 +1,4 @@
-name: blogctl ci
+name: test
 on: [push]
 jobs:
   test:

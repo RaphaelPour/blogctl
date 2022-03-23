@@ -1,4 +1,4 @@
-name: hcloud-ruby ci
+name: blogctl ci
 on: [push]
 jobs:
   test:

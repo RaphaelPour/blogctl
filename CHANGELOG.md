@@ -1,9 +1,11 @@
-# For next release
+# Minor Release v0.3.0 (2022-03-23)
   * **Raphael Pour**
     * render: add navigation with previous+next post and home
   * **Tch1b0**
     * render: add syntax-highlighting for code-blocks
-*Not released yet*
+    
+
+*Released by Raphael Pour <info@raphaelpour.de>*
 
 # Minor Release v0.2.0 (2022-01-13)
   * **Raphael Pour**

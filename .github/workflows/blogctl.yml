@@ -69,5 +69,6 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
+          files: ci-build/*
           body_path: CHANGELOG_RELEASE.md
           token: ${{ secrets.GITHUB_TOKEN }}

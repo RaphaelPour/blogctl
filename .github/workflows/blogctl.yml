@@ -30,7 +30,7 @@ jobs:
       - name: run linter
         run: ./bin/task lint
   build:
-    name: Relase blogctl
+    name: Build blogctl
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [test, lint]
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
           name: build-artifacts
           path: ci-build
   release:
-    name: Relase blogctl
+    name: Release blogctl
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     needs: build
@@ -64,8 +64,10 @@ jobs:
           path: ci-build
       - name: Save changelog entries of current release
         run: ./bin/changelogger release last > CHANGELOG_RELEASE.md
+      - name: Print changelog entries for debugging
+        run: cat CHANGELOG_RELEASE.md
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG_RELEASE.md
-          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}

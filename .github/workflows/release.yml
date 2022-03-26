@@ -19,7 +19,7 @@ jobs:
       - name: install task
         run: curl -Ls https://git.io/ttask.sh | sh
       - run: ./bin/task bin
-      - run: mv ci-build/blogctl ci-build/blogctl_${{ matrix.os-name }}
+      - run: mv ci-build/blogctl ci-build/blogctl_${{ matrix.goos }}
       - uses: actions/upload-artifact@master
         with:
           name: build-artifacts

@@ -19,6 +19,7 @@ func renderHook(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool
 
 	// get the language of the code from the top of the code-block
 	codeLanguage := string(node.(*ast.CodeBlock).Info)
+
 	lexer := lexers.Get(codeLanguage)
 	if lexer == nil {
 		lexer = lexers.Fallback

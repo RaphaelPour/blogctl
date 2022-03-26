@@ -1,0 +1,36 @@
+name: release
+
+on:
+  push:
+    tags:
+      - '*'
+    
+jobs:
+  build:
+    name: Relase blogctl
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, darwin]
+        goarch: [amd64]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: install task
+        run: curl -Ls https://git.io/ttask.sh | sh
+      - run: ./bin/task bin
+      - run: mv ci-build/blogctl ci-build/blogctl_${{ matrix.os-name }}
+      - uses: actions/upload-artifact@master
+        with:
+          name: build-artifacts
+          path: ci-build
+  release:
+    name: Relase blogctl
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: build-artifacts
+          path: ci-build
+      - run: ls ci-build

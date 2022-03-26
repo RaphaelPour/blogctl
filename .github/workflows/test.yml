@@ -1,4 +1,4 @@
-name: hcloud-ruby ci
+name: test
 on: [push]
 jobs:
   test:

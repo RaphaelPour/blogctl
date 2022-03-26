@@ -297,7 +297,6 @@ const (
 			h1 { margin:0px;}
 			.date { margin-top:10px;font-size: small; color: gray; }
 			.post { margin-top:10px;}
-
 			/* CODE STYLES */
 			/* Background */ .bg { background-color: #ffffff }
 			/* PreWrapper */ .chroma { background-color: #ffffff; }

@@ -1,8 +1,16 @@
+# For next release
+  * **Raphael Pour**
+    * **bugfix** cmd/list: fix file count condition to check if a post directory has enough files
+
+*Not released yet*
+
 # Minor Release v0.3.0 (2022-03-23)
   * **Raphael Pour**
     * render: add navigation with previous+next post and home
   * **Tch1b0**
     * render: add syntax-highlighting for code-blocks
+    
+
 *Released by Raphael Pour <info@raphaelpour.de>*
 
 # Minor Release v0.2.0 (2022-01-13)

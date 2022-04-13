@@ -51,7 +51,7 @@ var listCmd = &cobra.Command{
 				return fmt.Errorf("Error reading post path of %s: %s", postPath, err)
 			}
 
-			if len(files) != 2 {
+			if len(files) < 2 {
 				return fmt.Errorf(
 					"Unexpected count of files in post path %s. Found: %d",
 					postPath,

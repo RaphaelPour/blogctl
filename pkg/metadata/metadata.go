@@ -20,7 +20,12 @@ type Metadata struct {
 	CreatedAt int64  `json:"createdAt"`
 }
 
-const METADATA_FILE = "metadata.json"
+const (
+	METADATA_FILE = "metadata.json"
+
+	PUBLIC_STATUS = "public"
+	DRAFT_STATUS  = "draft"
+)
 
 func GetMetadataPath(postPath string) string {
 	return filepath.Join(postPath, METADATA_FILE)

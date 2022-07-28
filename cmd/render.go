@@ -103,7 +103,7 @@ var renderCmd = &cobra.Command{
 			}
 
 			/* Overstep posts which aren't set to 'public' */
-			if metadata.Status != "public" {
+			if metadata.Status != metadata.PUBLIC_STATUS {
 				continue
 			}
 

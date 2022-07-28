@@ -86,6 +86,7 @@ var addCmd = &cobra.Command{
 		metadata := &metadata.Metadata{
 			Title:     Title,
 			Status:    metadata.DRAFT_STATUS,
+			Static:    Static,
 			CreatedAt: time.Now().Unix(),
 		}
 		if err := metadata.Save(postPath); err != nil {
@@ -101,6 +102,7 @@ var addCmd = &cobra.Command{
 var (
 	Title       string
 	Interactive bool
+	Static      bool
 	SlugRegex   = regexp.MustCompile(`[^A-Za-z0-9-]`)
 )
 
@@ -108,6 +110,7 @@ func init() {
 	postCmd.AddCommand(addCmd)
 
 	addCmd.Flags().StringVarP(&Title, "title", "t", "", "Title of the post (required)")
+	addCmd.Flags().BoolVarP(&Static, "static", "s", false, "Creates static sites that are unlisted and manually used (like Impressum)")
 	addCmd.Flags().BoolVarP(&Interactive, "interactive", "i", false, "Opens default editor with new post.")
 }
 

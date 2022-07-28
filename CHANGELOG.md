@@ -1,6 +1,8 @@
 # For next release
   * **Raphael Pour**
     * **bugfix** cmd/list: fix file count condition to check if a post directory has enough files
+    * post: add static posts that are unlisted
+    * cmd/list: add 'static' column
 
 *Not released yet*
 

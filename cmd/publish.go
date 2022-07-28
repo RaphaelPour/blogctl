@@ -44,7 +44,7 @@ var publishCmd = &cobra.Command{
 			return err
 		}
 
-		metadata.Status = "public"
+		metadata.Status = metadata.PUBLIC_STATUS
 
 		if err := metadata.Save(metadataPath); err != nil {
 			return err

@@ -39,14 +39,14 @@ var publishCmd = &cobra.Command{
 		}
 
 		metadataPath := filepath.Join(BlogPath, Slug)
-		metadata, err := metadata.Load(metadataPath)
+		meta, err := metadata.Load(metadataPath)
 		if err != nil {
 			return err
 		}
 
-		metadata.Status = metadata.PUBLIC_STATUS
+		meta.Status = metadata.PUBLIC_STATUS
 
-		if err := metadata.Save(metadataPath); err != nil {
+		if err := meta.Save(metadataPath); err != nil {
 			return err
 		}
 

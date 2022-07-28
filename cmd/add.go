@@ -83,13 +83,13 @@ var addCmd = &cobra.Command{
 		}
 
 		/* Store metadata info */
-		metadata := &metadata.Metadata{
+		meta := &metadata.Metadata{
 			Title:     Title,
 			Status:    metadata.DRAFT_STATUS,
 			Static:    Static,
 			CreatedAt: time.Now().Unix(),
 		}
-		if err := metadata.Save(postPath); err != nil {
+		if err := meta.Save(postPath); err != nil {
 			rescuePost(content)
 			return err
 		}

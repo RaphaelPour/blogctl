@@ -44,7 +44,7 @@ type Post struct {
 	CreatedAt        string
 	Content          string
 	Rendered         template.HTML
-	Metadata         map[string]string
+	Metadata         *metadata.Metadata
 }
 
 // renderCmd represents the render command
@@ -97,18 +97,18 @@ var renderCmd = &cobra.Command{
 				)
 			}
 
-			metadata, err := metadata.Load(postPath)
+			meta, err := metadata.Load(postPath)
 			if err != nil {
 				return err
 			}
 
 			/* Overstep posts which aren't set to 'public' */
-			if metadata.Status != metadata.PUBLIC_STATUS {
+			if meta.Status != metadata.PUBLIC_STATUS {
 				continue
 			}
 
 			fmt.Printf("Rendering post #%02d: %s\n", i, dir.Name())
-			slugTitle := slug(metadata.Title)
+			slugTitle := slug(meta.Title)
 
 			content, err := ioutil.ReadFile(GetContentFile(postPath))
 			if err != nil {
@@ -130,19 +130,20 @@ var renderCmd = &cobra.Command{
 				}
 			}
 
-			timestamp := time.Unix(metadata.CreatedAt, 0)
+			timestamp := time.Unix(meta.CreatedAt, 0)
 			postFileName := fmt.Sprintf(
 				POST_FILE_TEMPLATE,
 				slugTitle,
 			)
 			post := Post{
-				Title:     metadata.Title,
+				Title:     meta.Title,
 				Link:      postFileName,
 				HomeLink:  INDEX_FILE,
 				Timestamp: timestamp.Unix(),
 				CreatedAt: timestamp.String(),
 				Content:   renderedStr,
 				Rendered:  template.HTML(renderedStr),
+				Metadata:  meta,
 			}
 			posts = append(posts, post)
 		}

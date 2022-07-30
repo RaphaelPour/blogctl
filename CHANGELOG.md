@@ -1,10 +1,10 @@
-# For next release
+# Minor Release v0.4.0 (2022-07-30)
   * **Raphael Pour**
     * **bugfix** cmd/list: fix file count condition to check if a post directory has enough files
     * post: add static posts that are unlisted
     * cmd/list: add 'static' column
 
-*Not released yet*
+*Released by Raphael Pour <info@raphaelpour.de>*
 
 # Minor Release v0.3.0 (2022-03-23)
   * **Raphael Pour**

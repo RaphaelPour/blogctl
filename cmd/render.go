@@ -296,7 +296,7 @@ const (
 		</li>
 		{{else}}<li><strong>no posts</strong></li>{{end}}
 		</ul>
-		<a href='rss.xml'>RSS</a>
+		<a href='rss.xml'>RSS</a>|<a href='impressum.html'>Impressum</a>
 	</body>
 </html>`
 	POST_TEMPLATE = `

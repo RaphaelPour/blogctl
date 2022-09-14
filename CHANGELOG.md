@@ -1,3 +1,9 @@
+# For next release
+  * **Raphael Pour**
+    * render: disable favicon to avoid client request
+
+*Not released yet*
+
 # Minor Release v0.4.0 (2022-07-30)
   * **Raphael Pour**
     * **bugfix** cmd/list: fix file count condition to check if a post directory has enough files

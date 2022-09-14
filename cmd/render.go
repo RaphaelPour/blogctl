@@ -276,6 +276,7 @@ const (
 	<head>
 		<meta charset="UTF-8">
 		<title>Blog</title>
+		<link rel="icon" href="data:,">
 		<link rel="alternate" type="application/rss+xml" title="Feed" href="/rss.xml">
 		<style>
 			h1 { margin:0px;}

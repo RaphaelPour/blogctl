@@ -3,6 +3,8 @@
     * render: 
       * disable favicon to avoid client request
       * add markdown footnote support
+      * **bugfix** navigation: render next/previous links properly and ignore
+        static posts
 
 *Not released yet*
 

@@ -157,14 +157,19 @@ var renderCmd = &cobra.Command{
 		})
 
 		/* set previous/next post of any post */
+		nextPost := -1
 		for i := 0; i < len(posts); i++ {
-			if i-1 >= 0 {
-				posts[i].NextPostLink = posts[i-1].Link
+			if posts[i].Metadata.Static {
+				continue
 			}
 
-			if i+1 < len(posts) {
-				posts[i].PreviousPostLink = posts[i+1].Link
+			if nextPost >= 0 {
+				posts[i].NextPostLink = posts[nextPost].Link
+				posts[nextPost].PreviousPostLink = posts[i].Link
+
+				fmt.Println(posts[i].Title, "<->", posts[nextPost].Title)
 			}
+			nextPost = i
 		}
 
 		/* render all posts */

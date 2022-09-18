@@ -1,6 +1,8 @@
 # For next release
   * **Raphael Pour**
-    * render: disable favicon to avoid client request
+    * render: 
+      * disable favicon to avoid client request
+      * add markdown footnote support
 
 *Not released yet*
 

@@ -30,6 +30,7 @@ import (
 	"github.com/RaphaelPour/blogctl/pkg/highlighter"
 	"github.com/RaphaelPour/blogctl/pkg/metadata"
 	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/parser"
 	"github.com/gorilla/feeds"
 	"github.com/spf13/cobra"
 )
@@ -115,8 +116,10 @@ var renderCmd = &cobra.Command{
 				return fmt.Errorf("Error reading post content %s: %s", postPath, err)
 			}
 
-			renderer := highlighter.GetRenderer()
-			rendered := markdown.ToHTML(content, nil, renderer)
+			rendered := markdown.ToHTML(
+				content, parser.NewWithExtensions(parser.CommonExtensions|parser.Footnotes),
+				highlighter.GetRenderer(),
+			)
 
 			/* replace all IMAGE(<filename>) with valid path to filename */
 			re := regexp.MustCompile(`IMAGE\(([\w\.]+)\)`)
@@ -308,6 +311,8 @@ const (
 		<title>Blog</title>
 		<style>
 			h1 { margin:0px;}
+			.footnotes > hr { border: 1px #EEE solid; }
+			.footnotes > ol { color: gray;}
 			.date { margin-top:10px;font-size: small; color: gray; }
 			.post { margin-top:10px;}
 

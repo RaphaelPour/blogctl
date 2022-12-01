@@ -1,4 +1,4 @@
-# For next release
+# Minor Release v0.5.0 (2022-12-01)
   * **Raphael Pour**
     * render: 
       * disable favicon to avoid client request
@@ -6,7 +6,7 @@
       * **bugfix** navigation: render next/previous links properly and ignore
         static posts
 
-*Not released yet*
+*Released by Raphael Pour <raphael.pour@hetzner.com>*
 
 # Minor Release v0.4.0 (2022-07-30)
   * **Raphael Pour**

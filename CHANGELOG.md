@@ -1,3 +1,9 @@
+# For next release
+  * **Raphael Pour**
+    * render: limit line with to 80 chars
+
+*Not released yet*
+
 # Minor Release v0.5.0 (2022-12-01)
   * **Raphael Pour**
     * render: 

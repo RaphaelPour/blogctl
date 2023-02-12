@@ -316,6 +316,7 @@ const (
 		<title>Blog</title>
 		<style>
 			h1 { margin:0px;}
+			p { max-width:80ch; }
 			.footnotes > hr { border: 1px #EEE solid; }
 			.footnotes > ol { color: gray;}
 			.date { margin-top:10px;font-size: small; color: gray; }

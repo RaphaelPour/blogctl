@@ -317,6 +317,7 @@ const (
 		<style>
 			h1 { margin:0px;}
 			body { max-width:80ch; }
+			img { max-width:80ch; }
 			.footnotes > hr { border: 1px #EEE solid; }
 			.footnotes > ol { color: gray;}
 			.date { margin-top:10px;font-size: small; color: gray; }
@@ -398,6 +399,7 @@ const (
 		<style>
 			h1 { margin:0px;}			
 			body { max-width:80ch; }
+			img { max-width:80ch; }
 			.footnotes > hr { border: 1px #EEE solid; }
 			.footnotes > ol { color: gray;}
 			.date { margin-top:10px;font-size: small; color: gray; }

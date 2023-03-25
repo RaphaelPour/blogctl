@@ -1,6 +1,8 @@
 # For next release
   * **Raphael Pour**
-    * render: limit line with to 80 chars
+    * render: 
+      * limit line with to 80 chars
+      * limit image width to 80 chars
 
 *Not released yet*
 

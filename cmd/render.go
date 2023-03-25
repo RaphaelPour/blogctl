@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -71,7 +70,7 @@ var renderCmd = &cobra.Command{
 			return fmt.Errorf("Error creating output folder: %s", err)
 		}
 
-		postDirs, err := ioutil.ReadDir(BlogPath)
+		postDirs, err := os.ReadDir(BlogPath)
 		if err != nil {
 			return fmt.Errorf("Error reading blog path: %s", err)
 		}
@@ -85,7 +84,7 @@ var renderCmd = &cobra.Command{
 			}
 
 			postPath := filepath.Join(BlogPath, dir.Name())
-			files, err := ioutil.ReadDir(postPath)
+			files, err := os.ReadDir(postPath)
 			if err != nil {
 				return fmt.Errorf("Error reading post path of %s: %s", postPath, err)
 			}
@@ -111,7 +110,7 @@ var renderCmd = &cobra.Command{
 			fmt.Printf("Rendering post #%02d: %s\n", i, dir.Name())
 			slugTitle := slug(meta.Title)
 
-			content, err := ioutil.ReadFile(GetContentFile(postPath))
+			content, err := os.ReadFile(GetContentFile(postPath))
 			if err != nil {
 				return fmt.Errorf("Error reading post content %s: %s", postPath, err)
 			}
@@ -246,7 +245,7 @@ var renderCmd = &cobra.Command{
 		}
 
 		rssPath := filepath.Join(OutPath, "rss.xml")
-		if err := ioutil.WriteFile(rssPath, []byte(rss), 0777); err != nil {
+		if err := os.WriteFile(rssPath, []byte(rss), 0777); err != nil {
 			return fmt.Errorf("Error writing rss.xml: %w", err)
 		}
 

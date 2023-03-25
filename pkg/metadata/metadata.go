@@ -3,7 +3,6 @@ package metadata // import "github.com/RaphaelPour/blogctl/pkg/metadata"
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -34,7 +33,7 @@ func GetMetadataPath(postPath string) string {
 
 func Load(postPath string) (*Metadata, error) {
 
-	raw, err := ioutil.ReadFile(GetMetadataPath(postPath))
+	raw, err := os.ReadFile(GetMetadataPath(postPath))
 	if err != nil {
 		return nil, fmt.Errorf("Error reading metadata: %s", err)
 	}
@@ -54,7 +53,7 @@ func (m Metadata) Save(postPath string) error {
 		return fmt.Errorf("Error converting metadata to json: %s", err)
 	}
 
-	if err := ioutil.WriteFile(GetMetadataPath(postPath), raw, os.ModePerm); err != nil {
+	if err := os.WriteFile(GetMetadataPath(postPath), raw, os.ModePerm); err != nil {
 		return fmt.Errorf("Error writing metadata: %s", err)
 	}
 

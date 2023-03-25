@@ -24,7 +24,6 @@ package cmd
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -47,7 +46,7 @@ var updateCmd = &cobra.Command{
 		}
 
 		/* Read in post content */
-		rawContent, err := ioutil.ReadFile(contentFile)
+		rawContent, err := os.ReadFile(contentFile)
 		if err != nil {
 			return fmt.Errorf("Error reading post '%s': %s", contentFile, err)
 		}
@@ -80,7 +79,7 @@ var updateCmd = &cobra.Command{
 		}
 
 		/* Write content back to file */
-		if err := ioutil.WriteFile(contentFile, []byte(content), os.ModePerm); err != nil {
+		if err := os.WriteFile(contentFile, []byte(content), os.ModePerm); err != nil {
 			rescuePost(content)
 			return fmt.Errorf("Error writing post: %s", err)
 		}

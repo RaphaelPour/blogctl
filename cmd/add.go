@@ -18,7 +18,6 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -77,7 +76,7 @@ var addCmd = &cobra.Command{
 			return fmt.Errorf("Error creating post dir: %s", err)
 		}
 
-		if err := ioutil.WriteFile(GetContentFile(postPath), []byte(content), os.ModePerm); err != nil {
+		if err := os.WriteFile(GetContentFile(postPath), []byte(content), os.ModePerm); err != nil {
 			rescuePost(content)
 			return fmt.Errorf("Error writing post: %s", err)
 		}
@@ -134,7 +133,7 @@ func Open(initialValue *string) error {
 		return fmt.Errorf("set EDITOR or VISUAL variable")
 	}
 
-	file, err := ioutil.TempFile("", "new-post*.md")
+	file, err := os.CreateTemp("", "new-post*.md")
 	if err != nil {
 		return err
 	}
@@ -162,7 +161,7 @@ func Open(initialValue *string) error {
 		return err
 	}
 
-	raw, err := ioutil.ReadFile(file.Name())
+	raw, err := os.ReadFile(file.Name())
 	if err != nil {
 		return err
 	}

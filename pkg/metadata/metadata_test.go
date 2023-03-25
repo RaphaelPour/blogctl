@@ -2,10 +2,10 @@ package metadata
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/require"
-	"io/ioutil"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestLoadMetadata(t *testing.T) {
@@ -17,12 +17,12 @@ func TestLoadMetadata(t *testing.T) {
 		title, date,
 	)
 
-	tmpDir, err := ioutil.TempDir("", "post-")
+	tmpDir, err := os.MkdirTemp("", "post-")
 	require.Nil(t, err)
 
 	path := GetMetadataPath(tmpDir)
 
-	require.Nil(t, ioutil.WriteFile(path, []byte(data), os.ModePerm))
+	require.Nil(t, os.WriteFile(path, []byte(data), os.ModePerm))
 
 	meta, err := Load(tmpDir)
 	require.Nil(t, err)
@@ -35,12 +35,12 @@ func TestNewInvalidMetadata(t *testing.T) {
 	/* Save example metadata json */
 	data := `{"title": "How I lost -5 kgs in one week", "createdAt": 1234`
 
-	tmpDir, err := ioutil.TempDir("", "post-")
+	tmpDir, err := os.MkdirTemp("", "post-")
 	require.Nil(t, err)
 
 	path := GetMetadataPath(tmpDir)
 
-	require.Nil(t, ioutil.WriteFile(path, []byte(data), os.ModePerm))
+	require.Nil(t, os.WriteFile(path, []byte(data), os.ModePerm))
 
 	meta, err := Load(tmpDir)
 	require.NotNil(t, err)
@@ -54,7 +54,7 @@ func TestSaveMetadata(t *testing.T) {
 		CreatedAt: 788918400,
 	}
 
-	tmpDir, err := ioutil.TempDir("", "post-")
+	tmpDir, err := os.MkdirTemp("", "post-")
 	require.Nil(t, err)
 
 	err = meta.Save(tmpDir)

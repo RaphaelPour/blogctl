@@ -18,7 +18,7 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -32,7 +32,7 @@ var listCmd = &cobra.Command{
 	Short: "List all available posts",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		postDirs, err := ioutil.ReadDir(BlogPath)
+		postDirs, err := os.ReadDir(BlogPath)
 		if err != nil {
 			return fmt.Errorf("Error reading blog path: %s", err)
 		}
@@ -46,7 +46,7 @@ var listCmd = &cobra.Command{
 			}
 
 			postPath := filepath.Join(BlogPath, dir.Name())
-			files, err := ioutil.ReadDir(postPath)
+			files, err := os.ReadDir(postPath)
 			if err != nil {
 				return fmt.Errorf("Error reading post path of %s: %s", postPath, err)
 			}

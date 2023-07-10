@@ -27,7 +27,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/RaphaelPour/blogctl/pkg/metadata"
+	"github.com/RaphaelPour/blogctl/internal/metadata"
 	"github.com/fatih/color"
 	shellquote "github.com/kballard/go-shellquote"
 )

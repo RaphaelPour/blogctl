@@ -3,6 +3,7 @@
     * render: 
       * limit line with to 80 chars
       * limit image width to 80 chars
+    * repo: make pkgs metadata and highlighter internal (#84)
 
 *Not released yet*
 

@@ -22,7 +22,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/RaphaelPour/blogctl/pkg/metadata"
+	"github.com/RaphaelPour/blogctl/internal/metadata"
 	"github.com/spf13/cobra"
 )
 

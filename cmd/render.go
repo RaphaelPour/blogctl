@@ -26,8 +26,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/RaphaelPour/blogctl/pkg/highlighter"
-	"github.com/RaphaelPour/blogctl/pkg/metadata"
+	"github.com/RaphaelPour/blogctl/internal/highlighter"
+	"github.com/RaphaelPour/blogctl/internal/metadata"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/parser"
 	"github.com/gorilla/feeds"

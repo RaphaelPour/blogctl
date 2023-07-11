@@ -26,12 +26,25 @@ import (
 	"sort"
 	"time"
 
+	_ "embed"
+
 	"github.com/RaphaelPour/blogctl/internal/highlighter"
 	"github.com/RaphaelPour/blogctl/internal/metadata"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/parser"
 	"github.com/gorilla/feeds"
 	"github.com/spf13/cobra"
+)
+
+var (
+	//go:embed index.tmpl
+	indexTemplate string
+
+	//go:embed post.tmpl
+	postTemplate string
+
+	//go:embed static.tmpl
+	staticTemplate string
 )
 
 type Post struct {
@@ -175,9 +188,9 @@ var renderCmd = &cobra.Command{
 		publishedPosts := make([]Post, 0)
 		for _, post := range posts {
 			/* Render single post */
-			templateString := POST_TEMPLATE
+			templateString := postTemplate
 			if post.Metadata.Static {
-				templateString = STATIC_TEMPLATE
+				templateString = staticTemplate
 			}
 			postTemplate, err := template.New("post").Parse(templateString)
 			if err != nil {
@@ -219,7 +232,7 @@ var renderCmd = &cobra.Command{
 		}
 
 		/* Put everything together */
-		t, err := template.New("blog").Parse(INDEX_TEMPLATE)
+		t, err := template.New("blog").Parse(indexTemplate)
 		if err != nil {
 			return fmt.Errorf("Error parsing the html template: %s", err)
 		}
@@ -277,192 +290,6 @@ const (
 	DEFAULT_OUT_PATH   = "./out/"
 	INDEX_FILE         = "index.html"
 	POST_FILE_TEMPLATE = "%s.html"
-	INDEX_TEMPLATE     = `
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Blog</title>
-		<link rel="icon" href="data:,">
-		<link rel="alternate" type="application/rss+xml" title="Feed" href="/rss.xml">
-		<style>
-			h1 { margin:0px;}
-			pre { width:100%;overflow:auto}
-			.date { margin-top:10px;font-size: small; color: gray; }
-			.post { margin-top:10px;}
-		</style>
-	</head>
-	<body>
-	<h2>evilcookie</h2>
-		Hi, I'm Raphael. I write about my software developer journey.
-		You can find my stuff on <a href='https://github.com/RaphaelPour'>github</a>.
-		<ul>
-		{{range .}}
-		<li>
-		  <span class='date'>[{{.CreatedAt}}]</span>
-			<a href='{{ .Link }}'>{{ .Title }}</a>
-		</li>
-		{{else}}<li><strong>no posts</strong></li>{{end}}
-		</ul>
-		<a href='rss.xml'>RSS</a>|<a href='impressum.html'>Impressum</a>
-	</body>
-</html>`
-	POST_TEMPLATE = `
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Blog</title>
-		<style>
-			h1 { margin:0px;}
-			body { max-width:80ch; }
-			img { max-width:80ch; }
-			.footnotes > hr { border: 1px #EEE solid; }
-			.footnotes > ol { color: gray;}
-			.date { margin-top:10px;font-size: small; color: gray; }
-			.post { margin-top:10px;}
-
-			/* CODE STYLES */
-			/* Background */ .bg { background-color: #ffffff }
-			/* PreWrapper */ .chroma { background-color: #ffffff; }
-			/* Error */ .chroma .err {  }
-			/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
-			/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
-			/* LineHighlight */ .chroma .hl { background-color: #e5e5e5 }
-			/* LineNumbersTable */ .chroma .lnt { white-space: pre; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
-			/* LineNumbers */ .chroma .ln { white-space: pre; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
-			/* Line */ .chroma .line { display: flex; }
-			/* Keyword */ .chroma .k { font-weight: bold }
-			/* KeywordConstant */ .chroma .kc { font-weight: bold }
-			/* KeywordDeclaration */ .chroma .kd { font-weight: bold; }
-			/* KeywordNamespace */ .chroma .kn { font-weight: bold }
-			/* KeywordPseudo */ .chroma .kp { font-weight: bold }
-			/* KeywordReserved */ .chroma .kr { font-weight: bold }
-			/* KeywordType */ .chroma .kt { font-weight: bold }
-			/* NameBuiltin */ .chroma .nb { }
-			/* NameBuiltinPseudo */ .chroma .bp { font-weight: bold; font-style: italic }
-			/* NameClass */ .chroma .nc { color: #666666; font-weight: bold; font-style: italic }
-			/* NameConstant */ .chroma .no { color: #666666; font-weight: bold; font-style: italic }
-			/* NameFunction */ .chroma .nf { }
-			/* NameNamespace */ .chroma .nn { color: #666666; font-weight: bold; font-style: italic }
-			/* NameVariable */ .chroma .nv { color: #666666; font-weight: bold; font-style: italic }
-			/* LiteralString */ .chroma .s { color: #666666 }
-			/* LiteralStringAffix */ .chroma .sa { color: #666666; font-style: italic }
-			/* LiteralStringBacktick */ .chroma .sb { color: #666666; font-style: italic }
-			/* LiteralStringChar */ .chroma .sc { color: #666666; font-style: italic }
-			/* LiteralStringDelimiter */ .chroma .dl { color: #666666; font-style: italic }
-			/* LiteralStringDoc */ .chroma .sd { color: #666666; font-style: italic }
-			/* LiteralStringDouble */ .chroma .s2 { color: #666666 }
-			/* LiteralStringEscape */ .chroma .se { color: #666666; font-style: italic }
-			/* LiteralStringHeredoc */ .chroma .sh { color: #666666; font-style: italic }
-			/* LiteralStringInterpol */ .chroma .si { color: #666666 }
-			/* LiteralStringOther */ .chroma .sx { color: #666666; font-style: italic }
-			/* LiteralStringRegex */ .chroma .sr { color: #666666; font-style: italic }
-			/* LiteralStringSingle */ .chroma .s1 { color: #666666 }
-			/* LiteralStringSymbol */ .chroma .ss { color: #666666; font-style: italic }
-			/* OperatorWord */ .chroma .ow { font-weight: bold }
-			/* Comment */ .chroma .c { color: #888888; font-style: italic }
-			/* CommentHashbang */ .chroma .ch { color: #888888; font-style: italic }
-			/* CommentMultiline */ .chroma .cm { color: #888888; font-style: italic }
-			/* CommentSingle */ .chroma .c1 { color: #888888; font-style: italic }
-			/* CommentSpecial */ .chroma .cs { color: #888888; font-weight: bold }
-			/* Include */ .chroma .cp { font-weight: bold }
-			/* Include */ .chroma .cpf { font-weight: bold }
-			/* CODE STYLES */
-
-			.chroma { min-width: 20ex; max-width: 100ex; padding: 10px 10px 10px 5px; background-color: #EEEEEE; border-radius: 3px; }
-		</style>
-	</head>
-	<body>
-		<div class='post'>
-			{{if .PreviousPostLink}}
-			<a href='{{.PreviousPostLink}}'>&lt;</a>
-			{{end}}
-			<a href='{{.HomeLink}}'>up</a>
-			{{if .NextPostLink}}
-			<a href='{{.NextPostLink}}'>&gt;</a>
-			{{end}}
-			</br>
-
-			<span class='date'>{{.CreatedAt}}</span>
-			{{ .Rendered }}
-		</div>
-	</body>
-</html>`
-	STATIC_TEMPLATE = `
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Blog</title>
-		<style>
-			h1 { margin:0px;}			
-			body { max-width:80ch; }
-			img { max-width:80ch; }
-			.footnotes > hr { border: 1px #EEE solid; }
-			.footnotes > ol { color: gray;}
-			.date { margin-top:10px;font-size: small; color: gray; }
-			.post { margin-top:10px;}
-
-			/* CODE STYLES */
-			/* Background */ .bg { background-color: #ffffff }
-			/* PreWrapper */ .chroma { background-color: #ffffff; }
-			/* Error */ .chroma .err {  }
-			/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
-			/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
-			/* LineHighlight */ .chroma .hl { background-color: #e5e5e5 }
-			/* LineNumbersTable */ .chroma .lnt { white-space: pre; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
-			/* LineNumbers */ .chroma .ln { white-space: pre; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
-			/* Line */ .chroma .line { display: flex; }
-			/* Keyword */ .chroma .k { font-weight: bold }
-			/* KeywordConstant */ .chroma .kc { font-weight: bold }
-			/* KeywordDeclaration */ .chroma .kd { font-weight: bold; }
-			/* KeywordNamespace */ .chroma .kn { font-weight: bold }
-			/* KeywordPseudo */ .chroma .kp { font-weight: bold }
-			/* KeywordReserved */ .chroma .kr { font-weight: bold }
-			/* KeywordType */ .chroma .kt { font-weight: bold }
-			/* NameBuiltin */ .chroma .nb { }
-			/* NameBuiltinPseudo */ .chroma .bp { font-weight: bold; font-style: italic }
-			/* NameClass */ .chroma .nc { color: #666666; font-weight: bold; font-style: italic }
-			/* NameConstant */ .chroma .no { color: #666666; font-weight: bold; font-style: italic }
-			/* NameFunction */ .chroma .nf { }
-			/* NameNamespace */ .chroma .nn { color: #666666; font-weight: bold; font-style: italic }
-			/* NameVariable */ .chroma .nv { color: #666666; font-weight: bold; font-style: italic }
-			/* LiteralString */ .chroma .s { color: #666666 }
-			/* LiteralStringAffix */ .chroma .sa { color: #666666; font-style: italic }
-			/* LiteralStringBacktick */ .chroma .sb { color: #666666; font-style: italic }
-			/* LiteralStringChar */ .chroma .sc { color: #666666; font-style: italic }
-			/* LiteralStringDelimiter */ .chroma .dl { color: #666666; font-style: italic }
-			/* LiteralStringDoc */ .chroma .sd { color: #666666; font-style: italic }
-			/* LiteralStringDouble */ .chroma .s2 { color: #666666 }
-			/* LiteralStringEscape */ .chroma .se { color: #666666; font-style: italic }
-			/* LiteralStringHeredoc */ .chroma .sh { color: #666666; font-style: italic }
-			/* LiteralStringInterpol */ .chroma .si { color: #666666 }
-			/* LiteralStringOther */ .chroma .sx { color: #666666; font-style: italic }
-			/* LiteralStringRegex */ .chroma .sr { color: #666666; font-style: italic }
-			/* LiteralStringSingle */ .chroma .s1 { color: #666666 }
-			/* LiteralStringSymbol */ .chroma .ss { color: #666666; font-style: italic }
-			/* OperatorWord */ .chroma .ow { font-weight: bold }
-			/* Comment */ .chroma .c { color: #888888; font-style: italic }
-			/* CommentHashbang */ .chroma .ch { color: #888888; font-style: italic }
-			/* CommentMultiline */ .chroma .cm { color: #888888; font-style: italic }
-			/* CommentSingle */ .chroma .c1 { color: #888888; font-style: italic }
-			/* CommentSpecial */ .chroma .cs { color: #888888; font-weight: bold }
-			/* Include */ .chroma .cp { font-weight: bold }
-			/* Include */ .chroma .cpf { font-weight: bold }
-			/* CODE STYLES */
-
-			.chroma { min-width: 20ex; max-width: 100ex; padding: 10px 10px 10px 5px; background-color: #EEEEEE; border-radius: 3px; }
-		</style>
-	</head>
-	<body>
-		<div class='post'>
-			<a href='{{.HomeLink}}'>up</a>
-			</br>
-			{{ .Rendered }}
-		</div>
-	</body>
-</html>`
 )
 
 var (

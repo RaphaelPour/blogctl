@@ -5,6 +5,7 @@
       * limit image width to 80 chars
       * outsource templates to files and embed them into the binary
     * repo: make pkgs metadata and highlighter internal (#84)
+    * repo: generalize blog by introducing a blog config
 
 *Not released yet*
 

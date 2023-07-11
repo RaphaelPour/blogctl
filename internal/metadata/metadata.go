@@ -1,4 +1,4 @@
-package metadata // import "github.com/RaphaelPour/blogctl/pkg/metadata"
+package metadata
 
 import (
 	"encoding/json"

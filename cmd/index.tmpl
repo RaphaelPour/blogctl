@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Blog</title>
+        <title>{{.Cfg.Title}}</title>
 		<link rel="icon" href="data:,">
 		<link rel="alternate" type="application/rss+xml" title="Feed" href="/rss.xml">
 		<style>
@@ -13,17 +13,16 @@
 		</style>
 	</head>
 	<body>
-	<h2>evilcookie</h2>
-		Hi, I'm Raphael. I write about my software developer journey.
-		You can find my stuff on <a href='https://github.com/RaphaelPour'>github</a>.
+    <h2>{{.Cfg.Title}}</h2>
+        {{.Cfg.Description}}
 		<ul>
-		{{range .}}
+		{{range .Posts}}
 		<li>
 		  <span class='date'>[{{.CreatedAt}}]</span>
 			<a href='{{ .Link }}'>{{ .Title }}</a>
 		</li>
 		{{else}}<li><strong>no posts</strong></li>{{end}}
 		</ul>
-		<a href='rss.xml'>RSS</a>|<a href='impressum.html'>Impressum</a>
+        {{.Cfg.Footer}}
 	</body>
 </html>

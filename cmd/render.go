@@ -24,10 +24,12 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	plainTemplate "text/template"
 	"time"
 
 	_ "embed"
 
+	"github.com/RaphaelPour/blogctl/internal/config"
 	"github.com/RaphaelPour/blogctl/internal/highlighter"
 	"github.com/RaphaelPour/blogctl/internal/metadata"
 	"github.com/gomarkdown/markdown"
@@ -66,12 +68,16 @@ var renderCmd = &cobra.Command{
 	Short: "Renders blog to static website",
 	Long:  "Collects all posts and renders the markdown using the metadata as static website",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := config.Load(BlogPath)
+		if err != nil {
+			return err
+		}
 
 		feed := &feeds.Feed{
-			Title:       "evilcookie.de",
-			Link:        &feeds.Link{Href: "https://evilcookie.de"},
-			Description: "drunken stack developer",
-			Author:      &feeds.Author{Name: "Raphael Pour"},
+			Title:       cfg.Title,
+			Link:        &feeds.Link{Href: fmt.Sprintf("https://%s", cfg.Domain)},
+			Description: cfg.Description,
+			Author:      &feeds.Author{Name: cfg.Author},
 			Created:     time.Now(),
 		}
 
@@ -222,17 +228,18 @@ var renderCmd = &cobra.Command{
 				Content: string(post.Rendered),
 				Link: &feeds.Link{
 					Href: fmt.Sprintf(
-						"https://evilcookie.de/%s.html",
+						"https://%s/%s.html",
+						cfg.Domain,
 						slug(post.Title),
 					),
 				},
-				Author:  &feeds.Author{Name: "Raphael Pour"},
+				Author:  &feeds.Author{Name: cfg.Author},
 				Created: time.Unix(post.Timestamp, 0),
 			})
 		}
 
 		/* Put everything together */
-		t, err := template.New("blog").Parse(indexTemplate)
+		t, err := plainTemplate.New("blog").Parse(indexTemplate)
 		if err != nil {
 			return fmt.Errorf("Error parsing the html template: %s", err)
 		}
@@ -244,7 +251,15 @@ var renderCmd = &cobra.Command{
 			return fmt.Errorf("Error creating index file: %s", err)
 		}
 
-		if err := t.Execute(file, publishedPosts); err != nil {
+		var indexVars = struct {
+			Posts []Post
+			Cfg   config.Config
+		}{
+			Posts: publishedPosts,
+			Cfg:   *cfg,
+		}
+
+		if err := t.Execute(file, indexVars); err != nil {
 			return fmt.Errorf("Error rendering posts: %s", err)
 		}
 

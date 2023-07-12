@@ -1,4 +1,4 @@
-# For next release
+# Major Release v1.0.0 (2023-07-12)
   * **Raphael Pour**
     * render: 
       * limit line with to 80 chars
@@ -7,7 +7,7 @@
     * repo: make pkgs metadata and highlighter internal (#84)
     * repo: generalize blog by introducing a blog config
 
-*Not released yet*
+*Released by Raphael Pour <raphael.pour@hetzner.com>*
 
 # Minor Release v0.5.0 (2022-12-01)
   * **Raphael Pour**

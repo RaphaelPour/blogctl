@@ -19,6 +19,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/spf13/cobra"
 )
@@ -29,8 +30,18 @@ var rootCmd = &cobra.Command{
 	Long:  "Blogctl manages blog markdown-based posts database-less and generates a static website on-demand",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if Version {
-			fmt.Println("BuildVersion: ", BuildVersion)
-			fmt.Println("BuildDate: ", BuildDate)
+			fmt.Println("BuildVersion:", BuildVersion)
+			fmt.Println("BuildDate:", BuildDate)
+
+			if buildInfo, ok := debug.ReadBuildInfo(); ok {
+				fmt.Println("GoVersion:", buildInfo.GoVersion)
+				for _, pair := range buildInfo.Settings {
+					if pair.Key == "vcs.revision" {
+						fmt.Println("Commit:", pair.Value)
+						break
+					}
+				}
+			}
 			return nil
 		}
 		return cmd.Help()

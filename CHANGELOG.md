@@ -1,3 +1,9 @@
+# For next release
+  * **Raphael Pour**
+    * cmd/root: add go version and last commit sha to the --version build information
+
+*Not released yet*
+
 # Major Release v1.0.0 (2023-07-12)
   * **Raphael Pour**
     * render: 

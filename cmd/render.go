@@ -52,12 +52,14 @@ var (
 type Post struct {
 	Title            string
 	Link             string
+	PermaLink        string
 	PreviousPostLink string
 	NextPostLink     string
 	HomeLink         string
 	Timestamp        int64
 	CreatedAt        string
 	Content          string
+	FeaturedImage    string
 	Rendered         template.HTML
 	Metadata         *metadata.Metadata
 }
@@ -156,15 +158,21 @@ var renderCmd = &cobra.Command{
 				POST_FILE_TEMPLATE,
 				slugTitle,
 			)
+			var featuredImage string
+			if len(meta.FeaturedImage) > 0 {
+				featuredImage = fmt.Sprintf("https://%s/%s_%s", cfg.Domain, slugTitle, meta.FeaturedImage)
+			}
 			post := Post{
-				Title:     meta.Title,
-				Link:      postFileName,
-				HomeLink:  INDEX_FILE,
-				Timestamp: timestamp.Unix(),
-				CreatedAt: timestamp.String(),
-				Content:   renderedStr,
-				Rendered:  template.HTML(renderedStr),
-				Metadata:  meta,
+				Title:         meta.Title,
+				Link:          postFileName,
+				PermaLink:     fmt.Sprintf("https://%s/%s.html", cfg.Domain, slugTitle),
+				HomeLink:      INDEX_FILE,
+				Timestamp:     timestamp.Unix(),
+				CreatedAt:     timestamp.String(),
+				Content:       renderedStr,
+				Rendered:      template.HTML(renderedStr),
+				FeaturedImage: featuredImage,
+				Metadata:      meta,
 			}
 			posts = append(posts, post)
 		}

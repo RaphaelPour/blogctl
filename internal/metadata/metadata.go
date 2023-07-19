@@ -14,10 +14,11 @@ import (
  * a blog post.
  */
 type Metadata struct {
-	Title     string `json:"title"`
-	Status    string `json:"status"`
-	Static    bool   `json:"static"`
-	CreatedAt int64  `json:"createdAt"`
+	Title         string `json:"title"`
+	Status        string `json:"status"`
+	Static        bool   `json:"static"`
+	CreatedAt     int64  `json:"createdAt"`
+	FeaturedImage string `json:"featuredImage"`
 }
 
 const (

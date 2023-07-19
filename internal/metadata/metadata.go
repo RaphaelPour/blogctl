@@ -49,7 +49,7 @@ func Load(postPath string) (*Metadata, error) {
 
 func (m Metadata) Save(postPath string) error {
 
-	raw, err := json.Marshal(m)
+	raw, err := json.MarshalIndent(m, "", "  ")
 	if err != nil {
 		return fmt.Errorf("Error converting metadata to json: %s", err)
 	}

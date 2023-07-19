@@ -1,6 +1,7 @@
 # For next release
   * **Raphael Pour**
     * cmd/root: add go version and last commit sha to the --version build information
+    * cmd/render: support opengraph tags for rich link preview
 
 *Not released yet*
 

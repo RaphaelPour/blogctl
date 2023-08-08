@@ -12,12 +12,13 @@ const (
 )
 
 type Config struct {
-	Version     int    `json:"version"`
-	Domain      string `json:"domain"`
-	Author      string `json:"author"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Footer      string `json:"footer"`
+	Version     int      `json:"version"`
+	Domain      string   `json:"domain"`
+	Author      string   `json:"author"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	ChillFiles  []string `json:"chill-files"`
+	Footer      string   `json:"footer"`
 }
 
 func ConfigPath(postPath string) string {

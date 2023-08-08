@@ -285,6 +285,19 @@ var renderCmd = &cobra.Command{
 			return fmt.Errorf("Error writing rss.xml: %w", err)
 		}
 
+		/* copy chill-files to output dir */
+		for _, chillFile := range cfg.ChillFiles {
+			src := chillFile
+			if !filepath.IsAbs(src) {
+				src = filepath.Join(BlogPath, src)
+			}
+			dst := filepath.Join(OutPath, filepath.Base(src))
+			if err := copyFile(src, dst); err != nil {
+				return fmt.Errorf("copy chill-file %s to %s failed: %w", src, dst, err)
+			}
+			fmt.Printf("copied chill-file %s to %s\n", src, dst)
+		}
+
 		return nil
 	},
 }

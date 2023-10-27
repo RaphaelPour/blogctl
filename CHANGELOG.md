@@ -4,6 +4,7 @@
     * cmd/render: support opengraph tags for rich link preview
     * metadata: pretty render initial metadata
     * cmd/render, config: add chill-files list containing arbitrary files that just get copied to the root of the output dir
+    * cmd: add admin/rewrite-metadata command to pretty print all old metadata files
 
 *Not released yet*
 

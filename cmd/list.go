@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
@@ -67,7 +66,7 @@ var listCmd = &cobra.Command{
 			}
 
 			table.Append([]string{
-				time.Unix(metadata.CreatedAt, 0).String(),
+				metadata.Date(),
 				metadata.Status,
 				fmt.Sprintf("%t", metadata.Static),
 				metadata.Title,

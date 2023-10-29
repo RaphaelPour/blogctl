@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 /**
@@ -59,4 +60,8 @@ func (m Metadata) Save(postPath string) error {
 	}
 
 	return nil
+}
+
+func (m Metadata) Date() string {
+	return time.Unix(m.CreatedAt, 0).Format(time.DateOnly)
 }

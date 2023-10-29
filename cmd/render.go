@@ -153,7 +153,6 @@ var renderCmd = &cobra.Command{
 				}
 			}
 
-			timestamp := time.Unix(meta.CreatedAt, 0)
 			postFileName := fmt.Sprintf(
 				POST_FILE_TEMPLATE,
 				slugTitle,
@@ -167,8 +166,8 @@ var renderCmd = &cobra.Command{
 				Link:          postFileName,
 				PermaLink:     fmt.Sprintf("https://%s/%s.html", cfg.Domain, slugTitle),
 				HomeLink:      INDEX_FILE,
-				Timestamp:     timestamp.Unix(),
-				CreatedAt:     timestamp.String(),
+				Timestamp:     meta.CreatedAt,
+				CreatedAt:     meta.Date(),
 				Content:       renderedStr,
 				Rendered:      template.HTML(renderedStr),
 				FeaturedImage: featuredImage,

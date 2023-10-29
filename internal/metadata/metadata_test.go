@@ -29,6 +29,7 @@ func TestLoadMetadata(t *testing.T) {
 
 	require.Equal(t, title, meta.Title)
 	require.Equal(t, date, meta.CreatedAt)
+	require.Equal(t, "1970-01-01", meta.Date())
 }
 
 func TestNewInvalidMetadata(t *testing.T) {

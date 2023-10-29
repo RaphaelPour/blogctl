@@ -22,8 +22,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/RaphaelPour/blogctl/internal/metadata"
+	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
+
+	"github.com/RaphaelPour/blogctl/internal/metadata"
 )
 
 // listCmd represents the list command
@@ -37,8 +39,8 @@ var listCmd = &cobra.Command{
 			return fmt.Errorf("Error reading blog path: %s", err)
 		}
 
-		fmt.Println("Creation date                  | Status  | Static | Title")
-		fmt.Println("-------------------------------+---------+--------+---------------")
+		table := tablewriter.NewWriter(os.Stdout)
+		table.SetHeader([]string{"Creation date", "Status", "Static", "Title"})
 
 		for _, dir := range postDirs {
 			if !dir.IsDir() {
@@ -64,14 +66,16 @@ var listCmd = &cobra.Command{
 				return err
 			}
 
-			fmt.Printf("%-30s | %-6s | %-6v | %s\n",
+			table.Append([]string{
 				time.Unix(metadata.CreatedAt, 0).String(),
 				metadata.Status,
-				metadata.Static,
+				fmt.Sprintf("%t", metadata.Static),
 				metadata.Title,
-			)
+			})
 
 		}
+
+		table.Render()
 
 		return nil
 	},

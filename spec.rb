@@ -109,7 +109,7 @@ describe 'CLI' do
 
     it 'lists zero posts' do
       out, _, _ = blogctl("list -p #{blog_path}")
-      expect(out).to match(/^Creation data\s*|\s*Title$/)
+      expect(out).to match(/^| CREATION DATE | STATUS | STATIC | TITLE |$/)
     end
 
     it 'lists one post' do

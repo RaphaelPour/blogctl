@@ -1,4 +1,4 @@
-# For next release
+# Minor Release v1.1.0 (2023-11-02)
   * **Raphael Pour**
     * cmd/root: add go version and last commit sha to the --version build information
     * cmd/render: support opengraph tags for rich link preview
@@ -7,7 +7,7 @@
     * cmd: add admin/rewrite-metadata command to pretty print all old metadata files
     * cmd/list: render table via tablewriter
 
-*Not released yet*
+*Released by Raphael Pour <raphael.pour@hetzner.com>*
 
 # Major Release v1.0.0 (2023-07-12)
   * **Raphael Pour**

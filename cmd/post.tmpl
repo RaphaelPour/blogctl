@@ -6,12 +6,15 @@
         <meta property="og:title" content="{{.Title}}"/>
         <meta property="og:type" content="website"/>
         <meta property="og:url" content="{{.PermaLink}}"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
         {{if .FeaturedImage}}
         <meta property="og:image" content="{{.FeaturedImage}}"/>
         {{end}}
 		<style>
 			h1 { margin:0px;}
-			body { max-width:80ch; margin-right: auto; margin-left: auto; }
+			body { max-width:80ch; margin-right: auto; margin-left: auto; font-family: "Roboto Slab", serif}
 			img { max-width:80ch; }
 			.footnotes > hr { border: 1px #EEE solid; }
 			.footnotes > ol { color: gray;}

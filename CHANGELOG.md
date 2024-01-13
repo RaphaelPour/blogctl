@@ -1,10 +1,10 @@
-# For next release
+# Major Release v2.0.0 (2024-01-13)
   * **Raphael Pour**
     * templates:
       * center content
       * use google font Roboto Slab
 
-*Not released yet*
+*Released by Raphael Pour <info@raphaelpour.de>*
 
 # Minor Release v1.1.0 (2023-11-02)
   * **Raphael Pour**

@@ -1,3 +1,11 @@
+# For next release
+  * **Raphael Pour**
+    * templates:
+      * center content
+      * use google font Roboto Slab
+
+*Not released yet*
+
 # Minor Release v1.1.0 (2023-11-02)
   * **Raphael Pour**
     * cmd/root: add go version and last commit sha to the --version build information

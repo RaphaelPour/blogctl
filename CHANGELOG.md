@@ -1,7 +1,11 @@
 # For next release
   * **Raphael Pour**
-    * static: add new centric style with new font Roboto Slab
-    * templates: add slider if code block overflows
+    * templates:
+      * static: add new centric style with new font Roboto Slab
+      * code blocks: 
+        * fix width 
+        * fix padding
+        * add slider on overflow
 
 *Not released yet*
 

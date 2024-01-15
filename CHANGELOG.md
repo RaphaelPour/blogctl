@@ -1,4 +1,4 @@
-# For next release
+# Minor Release v2.1.0 (2024-01-15)
   * **Raphael Pour**
     * templates:
       * static: add new centric style with new font Roboto Slab
@@ -7,7 +7,7 @@
         * fix padding
         * add slider on overflow
 
-*Not released yet*
+*Released by Raphael Pour <raphael.pour@hetzner.com>*
 
 # Major Release v2.0.0 (2024-01-13)
   * **Raphael Pour**

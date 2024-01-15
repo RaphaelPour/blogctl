@@ -1,3 +1,9 @@
+# For next release
+  * **Raphael Pour**
+    * static: add new centric style with new font Roboto Slab
+
+*Not released yet*
+
 # Major Release v2.0.0 (2024-01-13)
   * **Raphael Pour**
     * templates:

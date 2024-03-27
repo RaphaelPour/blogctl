@@ -19,6 +19,7 @@ type Config struct {
 	Description string   `json:"description"`
 	ChillFiles  []string `json:"chill-files"`
 	Footer      string   `json:"footer"`
+	Discussion  bool     `json:"discussion"`
 }
 
 func ConfigPath(postPath string) string {

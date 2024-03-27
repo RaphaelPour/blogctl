@@ -60,6 +60,7 @@ type Post struct {
 	CreatedAt        string
 	Content          string
 	FeaturedImage    string
+	Discussion       bool
 	Rendered         template.HTML
 	Metadata         *metadata.Metadata
 }
@@ -169,6 +170,7 @@ var renderCmd = &cobra.Command{
 				Timestamp:     meta.CreatedAt,
 				CreatedAt:     meta.Date(),
 				Content:       renderedStr,
+				Discussion:    cfg.Discussion && !meta.Static,
 				Rendered:      template.HTML(renderedStr),
 				FeaturedImage: featuredImage,
 				Metadata:      meta,

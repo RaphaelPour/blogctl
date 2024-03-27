@@ -1,6 +1,7 @@
 # For next release
   * **Raphael Pour**
     * metadata: render posts with date instead of full timestamp
+    * post: add discussion board via github using giscus
 
 *Not released yet*
 

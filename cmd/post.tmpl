@@ -87,5 +87,22 @@
 			<span class='date'>{{.CreatedAt}}</span>
 			{{ .Rendered }}
 		</div>
+    {{if .Discussion}}
+    <script src="https://giscus.app/client.js"
+      data-repo="RaphaelPour/blog-feedback"
+      data-repo-id="R_kgDOLmFm8g"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOLmFm8s4CeQ5V"
+      data-mapping="og:title"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async>
+    </script>
+  {{end}}
 	</body>
 </html>

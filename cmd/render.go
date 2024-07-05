@@ -53,6 +53,8 @@ type Post struct {
 	Title            string
 	Link             string
 	PermaLink        string
+	FirstPostLink    string
+	LastPostLink     string
 	PreviousPostLink string
 	NextPostLink     string
 	HomeLink         string
@@ -190,11 +192,18 @@ var renderCmd = &cobra.Command{
 				continue
 			}
 
+			if i != 0 {
+				posts[i].FirstPostLink = posts[0].Link
+			}
+
+			if i != len(posts)-1 {
+				// can't be -1 as loop would've been skipped if so
+				posts[i].LastPostLink = posts[len(posts)-1].Link
+			}
+
 			if nextPost >= 0 {
 				posts[i].NextPostLink = posts[nextPost].Link
 				posts[nextPost].PreviousPostLink = posts[i].Link
-
-				fmt.Println(posts[i].Title, "<->", posts[nextPost].Title)
 			}
 			nextPost = i
 		}

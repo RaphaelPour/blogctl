@@ -3,6 +3,7 @@
     * metadata: render posts with date instead of full timestamp
     * post: add discussion board via github using giscus
     * dependency: update go to 1.22.4
+    * post: add first/last post navigation links
 
 *Not released yet*
 

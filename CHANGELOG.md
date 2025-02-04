@@ -2,7 +2,8 @@
   * **Raphael Pour**
     * metadata: render posts with date instead of full timestamp
     * post: add discussion board via github using giscus
-    * dependency: update go to 1.22.4
+    * dependency: update go to 1.23.0
+    * render: enhance readability of links
 
 *Not released yet*
 

@@ -1,4 +1,4 @@
-# For next release
+# Minor Release v2.2.0 (2025-02-18)
   * **Raphael Pour**
     * metadata: render posts with date instead of full timestamp
     * post: add discussion board via github using giscus
@@ -6,7 +6,7 @@
     * render: enhance readability of links
     * list: add filter
 
-*Not released yet*
+*Released by Raphael Pour <raphael.pour@hetzner.com>*
 
 # Minor Release v2.1.0 (2024-01-15)
   * **Raphael Pour**

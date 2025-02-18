@@ -4,6 +4,7 @@
     * post: add discussion board via github using giscus
     * dependency: update go to 1.23.0
     * render: enhance readability of links
+    * list: add filter
 
 *Not released yet*
 

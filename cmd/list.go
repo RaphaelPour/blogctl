@@ -20,12 +20,25 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
+	"slices"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 
 	"github.com/RaphaelPour/blogctl/internal/metadata"
 )
+
+type RegexpSet []*regexp.Regexp
+
+func (r RegexpSet) Match(s string) bool {
+	for _, pattern := range r {
+		if !pattern.MatchString(s) {
+			return false
+		}
+	}
+	return true
+}
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
@@ -40,6 +53,14 @@ var listCmd = &cobra.Command{
 
 		table := tablewriter.NewWriter(os.Stdout)
 		table.SetHeader([]string{"Creation date", "Status", "Static", "Title"})
+
+		// Compile title regex pattern, if any
+		titlePattern := make(RegexpSet, len(titleFilter))
+		for i, pattern := range titleFilter {
+			if titlePattern[i], err = regexp.Compile(pattern); err != nil {
+				return fmt.Errorf("error parsing title regex %q: %w", pattern, err)
+			}
+		}
 
 		for _, dir := range postDirs {
 			if !dir.IsDir() {
@@ -65,6 +86,14 @@ var listCmd = &cobra.Command{
 				return err
 			}
 
+			if statusFilter != nil && !slices.Contains(statusFilter, metadata.Status) {
+				continue
+			}
+
+			if titlePattern != nil && !titlePattern.Match(metadata.Title) {
+				continue
+			}
+
 			table.Append([]string{
 				metadata.Date(),
 				metadata.Status,
@@ -80,6 +109,13 @@ var listCmd = &cobra.Command{
 	},
 }
 
+var (
+	statusFilter []string
+	titleFilter  []string
+)
+
 func init() {
 	rootCmd.AddCommand(listCmd)
+	listCmd.Flags().StringSliceVar(&statusFilter, "status", nil, "Filter for status. Comma-separated or multiple flags allowed.")
+	listCmd.Flags().StringSliceVar(&titleFilter, "title", nil, "Filter for title. Comma-separated or multiple flags with regex allowed.")
 }

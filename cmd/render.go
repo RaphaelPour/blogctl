@@ -17,6 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"embed"
 	"fmt"
 	"html/template"
 	"io"
@@ -24,6 +25,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strings"
 	plainTemplate "text/template"
 	"time"
 
@@ -39,15 +41,23 @@ import (
 )
 
 var (
-	//go:embed index.tmpl
-	indexTemplate string
+	//go:embed public/*
+	content embed.FS
 
-	//go:embed post.tmpl
-	postTemplate string
+	indexTemplate = string(unwrap(content.ReadFile("public/index.tmpl.html")))
 
-	//go:embed static.tmpl
-	staticTemplate string
+	postTemplate = string(unwrap(content.ReadFile("public/post.tmpl.html")))
+
+	staticTemplate = string(unwrap(content.ReadFile("public/static.tmpl.html")))
 )
+
+func unwrap[T any](value T, err error) T {
+	if err != nil {
+		panic(err)
+	}
+
+	return value
+}
 
 type Post struct {
 	Title            string
@@ -284,6 +294,19 @@ var renderCmd = &cobra.Command{
 		rssPath := filepath.Join(OutPath, "rss.xml")
 		if err := os.WriteFile(rssPath, []byte(rss), 0777); err != nil {
 			return fmt.Errorf("Error writing rss.xml: %w", err)
+		}
+
+		// write content from public dir
+		for _, file := range unwrap(content.ReadDir("public")) {
+			if strings.Contains(file.Name(), "tmpl") {
+				continue
+			}
+
+			f, _ := content.ReadFile(file.Name())
+			fPath := filepath.Join(OutPath, file.Name())
+			if err := os.WriteFile(fPath, f, 0777); err != nil {
+				return fmt.Errorf("Error writing %s: %w", file.Name(), err)
+			}
 		}
 
 		/* copy chill-files to output dir */

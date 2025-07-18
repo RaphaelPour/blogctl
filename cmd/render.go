@@ -22,6 +22,7 @@ import (
 	"html/template"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -302,7 +303,7 @@ var renderCmd = &cobra.Command{
 				continue
 			}
 
-			f, _ := content.ReadFile(file.Name())
+			f, _ := content.ReadFile(path.Join("public", file.Name()))
 			fPath := filepath.Join(OutPath, file.Name())
 			if err := os.WriteFile(fPath, f, 0777); err != nil {
 				return fmt.Errorf("Error writing %s: %w", file.Name(), err)

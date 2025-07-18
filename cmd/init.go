@@ -42,7 +42,7 @@ var initCmd = &cobra.Command{
 		}
 
 		configPath := path.Join(BlogPath, "blog.json")
-		marshalledConfig, err := json.Marshal(config.CreateDefaultConfig())
+		marshalledConfig, err := json.MarshalIndent(config.CreateDefaultConfig(), "", "    ")
 		if err != nil {
 			return fmt.Errorf("Internal error: default config not marshallable")
 		}

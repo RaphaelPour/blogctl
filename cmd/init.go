@@ -41,7 +41,7 @@ var initCmd = &cobra.Command{
 			return fmt.Errorf("Error creating blog environment: %s\n", err)
 		}
 
-		configPath := path.Join(BlogPath, "blogctl.json")
+		configPath := path.Join(BlogPath, "blog.json")
 		marshalledConfig, err := json.Marshal(config.CreateDefaultConfig())
 		if err != nil {
 			return fmt.Errorf("Internal error: default config not marshallable")

@@ -22,6 +22,19 @@ type Config struct {
 	Discussion  bool     `json:"discussion"`
 }
 
+func CreateDefaultConfig() *Config {
+	return &Config{
+		Version:     1,
+		Domain:      "{Your blogctl domain}",
+		Author:      "{Your name}",
+		Title:       "{Title of your blog}",
+		Description: "{Description of your blog}",
+		ChillFiles:  []string{},
+		Footer:      "{Footer of your blog}",
+		Discussion:  false,
+	}
+}
+
 func ConfigPath(postPath string) string {
 	return filepath.Join(postPath, CONFIG_FILE)
 }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{{.Cfg.Title}}</title>
+        <link rel="icon" href="data:," />
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="Feed"
+            href="/rss.xml"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="blogstyle.css" />
+    </head>
+    <body>
+        <h2>{{.Cfg.Title}}</h2>
+        {{.Cfg.Description}}
+        <ul>
+            {{range .Posts}}
+            <li style="list-style: none">
+                <span class="date">[{{.CreatedAt}}]</span>
+                <a href="{{ .Link }}">{{ .Title }}</a>
+            </li>
+            {{else}}
+            <li><strong>no posts</strong></li>
+            {{end}}
+        </ul>
+        {{.Cfg.Footer}}
+    </body>
+</html>

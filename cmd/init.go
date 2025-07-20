@@ -17,9 +17,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"path"
 
+	"github.com/RaphaelPour/blogctl/internal/config"
 	"github.com/spf13/cobra"
 )
 
@@ -36,6 +39,16 @@ var initCmd = &cobra.Command{
 
 		if err := os.MkdirAll(BlogPath, os.ModePerm); err != nil {
 			return fmt.Errorf("Error creating blog environment: %s\n", err)
+		}
+
+		configPath := path.Join(BlogPath, "blog.json")
+		marshalledConfig, err := json.MarshalIndent(config.CreateDefaultConfig(), "", "    ")
+		if err != nil {
+			return fmt.Errorf("Internal error: default config not marshallable")
+		}
+
+		if err = os.WriteFile(configPath, marshalledConfig, 0777); err != nil {
+			return fmt.Errorf("Error writing the default config file to %s", configPath)
 		}
 
 		return nil

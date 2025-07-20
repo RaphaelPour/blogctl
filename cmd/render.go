@@ -41,15 +41,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	PUBLIC_DIR_PATH = "public"
+)
+
 var (
 	//go:embed public/*
 	content embed.FS
 
-	indexTemplate = string(unwrap(content.ReadFile("public/index.tmpl.html")))
+	indexTemplatePath = path.Join(PUBLIC_DIR_PATH, "index.tmpl.html")
+	indexTemplate     = string(unwrap(content.ReadFile(indexTemplatePath)))
 
-	postTemplate = string(unwrap(content.ReadFile("public/post.tmpl.html")))
+	postTemplatePath = path.Join(PUBLIC_DIR_PATH, "post.tmpl.html")
+	postTemplate     = string(unwrap(content.ReadFile(postTemplatePath)))
 
-	staticTemplate = string(unwrap(content.ReadFile("public/static.tmpl.html")))
+	staticTemplatePath = path.Join(PUBLIC_DIR_PATH, "static.tmpl.html")
+	staticTemplate     = string(unwrap(content.ReadFile(staticTemplatePath)))
 )
 
 func unwrap[T any](value T, err error) T {
@@ -298,14 +305,19 @@ var renderCmd = &cobra.Command{
 		}
 
 		// write content from public dir
-		for _, file := range unwrap(content.ReadDir("public")) {
+		for _, file := range unwrap(content.ReadDir(PUBLIC_DIR_PATH)) {
 			if strings.Contains(file.Name(), "tmpl") {
 				continue
 			}
 
-			f, _ := content.ReadFile(path.Join("public", file.Name()))
-			fPath := filepath.Join(OutPath, file.Name())
-			if err := os.WriteFile(fPath, f, 0777); err != nil {
+			inPath := path.Join(PUBLIC_DIR_PATH, file.Name())
+			f, err := content.ReadFile(inPath)
+			if err != nil {
+				return fmt.Errorf("Error reading %s", inPath)
+			}
+
+			outPath := filepath.Join(OutPath, file.Name())
+			if err := os.WriteFile(outPath, f, 0777); err != nil {
 				return fmt.Errorf("Error writing %s: %w", file.Name(), err)
 			}
 		}

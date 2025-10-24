@@ -57,4 +57,5 @@ var draftCmd = &cobra.Command{
 func init() {
 	postCmd.AddCommand(draftCmd)
 	draftCmd.Flags().StringVarP(&Slug, "slug", "s", "", "Slug of the post (required)")
+	_ = draftCmd.RegisterFlagCompletionFunc("slug", SlugCompletion)
 }

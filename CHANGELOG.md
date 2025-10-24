@@ -1,3 +1,9 @@
+# For next release
+  * **Raphael Pour**
+    * cmd: add slug completion
+
+*Not released yet*
+
 # Minor Release v2.2.0 (2025-02-18)
   * **Raphael Pour**
     * metadata: render posts with date instead of full timestamp

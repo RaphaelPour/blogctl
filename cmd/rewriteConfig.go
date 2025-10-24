@@ -57,6 +57,7 @@ var rewriteMetadataCmd = &cobra.Command{
 func init() {
 	adminCmd.AddCommand(rewriteMetadataCmd)
 	rewriteMetadataCmd.Flags().StringVarP(&Slug, "slug", "s", "", "Slug of the post. Use all if empty.")
+	_ = rewriteMetadataCmd.RegisterFlagCompletionFunc("slug", SlugCompletion)
 }
 
 func rewriteMetadata(postPath string) error {

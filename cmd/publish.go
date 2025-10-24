@@ -57,4 +57,5 @@ var publishCmd = &cobra.Command{
 func init() {
 	postCmd.AddCommand(publishCmd)
 	publishCmd.Flags().StringVarP(&Slug, "slug", "s", "", "Slug of the post (required)")
+	_ = publishCmd.RegisterFlagCompletionFunc("slug", SlugCompletion)
 }

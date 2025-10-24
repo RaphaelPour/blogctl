@@ -97,4 +97,6 @@ func init() {
 	updateCmd.Flags().StringVarP(&Slug, "slug", "s", "", "Slug of the post (required)")
 	updateCmd.Flags().BoolVarP(&AppendStdin, "append", "a", false, "Append stdin to post")
 	updateCmd.Flags().BoolVarP(&Interactive, "interactive", "i", false, "Opend default editor with existing post")
+
+	_ = updateCmd.RegisterFlagCompletionFunc("slug", SlugCompletion)
 }

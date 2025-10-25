@@ -72,7 +72,7 @@ var updateCmd = &cobra.Command{
 
 		/* Open editor with content if interactive flag is set*/
 		if Interactive {
-			if err := Open(&content); err != nil {
+			if err := common.Open(&content); err != nil {
 				rescuePost(content)
 				return fmt.Errorf("Error getting content from user: %s", err)
 			}

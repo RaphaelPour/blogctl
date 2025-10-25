@@ -1,4 +1,4 @@
-package cmd
+package common
 
 import (
 	"testing"
@@ -9,17 +9,17 @@ import (
 func TestSlug(t *testing.T) {
 
 	/* A non-special string should stay the same */
-	require.Equal(t, "prolog", slug("prolog"))
+	require.Equal(t, "prolog", Slug("prolog"))
 
 	/* Spaces should be replaced by hyphens */
-	require.Equal(t, "debugging-nightmares", slug("debugging nightmares"))
+	require.Equal(t, "debugging-nightmares", Slug("debugging nightmares"))
 
 	/* Uppercase letters should get low */
-	require.Equal(t, "news", slug("News"))
+	require.Equal(t, "news", Slug("News"))
 
 	/* Special characters should get removed */
-	require.Equal(t, "lisp", slug("((lisp))"))
+	require.Equal(t, "lisp", Slug("((lisp))"))
 
 	/* Everything together */
-	require.Equal(t, "2-be---2-be", slug("2 BE || ! 2 BE"))
+	require.Equal(t, "2-be---2-be", Slug("2 BE || ! 2 BE"))
 }

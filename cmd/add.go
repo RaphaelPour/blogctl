@@ -19,17 +19,14 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"regexp"
-	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
 
+	"github.com/RaphaelPour/blogctl/internal/common"
 	"github.com/RaphaelPour/blogctl/internal/metadata"
 	"github.com/fatih/color"
-	shellquote "github.com/kballard/go-shellquote"
 )
 
 const CONTENT_FILE = "content.md"
@@ -48,7 +45,7 @@ var addCmd = &cobra.Command{
 		}
 
 		/* Generate slug */
-		slug := slug(Title)
+		slug := common.Slug(Title)
 		postPath := filepath.Join(BlogPath, slug)
 
 		/* Check if slug already exists */
@@ -64,8 +61,7 @@ var addCmd = &cobra.Command{
 		}
 
 		if Interactive {
-			err := Open(&content)
-			if err != nil {
+			if err := common.Editor(&content); err != nil {
 				return fmt.Errorf("Error getting content from user: %s", err)
 			}
 		}
@@ -102,7 +98,6 @@ var (
 	Title       string
 	Interactive bool
 	Static      bool
-	SlugRegex   = regexp.MustCompile(`[^A-Za-z0-9-]`)
 )
 
 func init() {
@@ -113,59 +108,6 @@ func init() {
 	addCmd.Flags().BoolVarP(&Interactive, "interactive", "i", false, "Opens default editor with new post.")
 }
 
-func slug(s string) string {
-	return SlugRegex.ReplaceAllString(strings.ReplaceAll(strings.ToLower(s), " ", "-"), "")
-}
-
 func rescuePost(content string) {
 	fmt.Printf("<<< POST\n%s\n>>> POST\n", content)
-}
-
-func Open(initialValue *string) error {
-	var editor string
-	if val, ok := os.LookupEnv("EDITOR"); ok {
-		editor = val
-	}
-	if val, ok := os.LookupEnv("VISUAL"); ok {
-		editor = val
-	}
-	if editor == "" {
-		return fmt.Errorf("set EDITOR or VISUAL variable")
-	}
-
-	file, err := os.CreateTemp("", "new-post*.md")
-	if err != nil {
-		return err
-	}
-	defer os.Remove(file.Name())
-
-	if _, err := file.WriteString(*initialValue); err != nil {
-		return err
-	}
-
-	if err := file.Close(); err != nil {
-		return err
-	}
-
-	args, err := shellquote.Split(editor)
-	if err != nil {
-		return err
-	}
-	args = append(args, file.Name())
-
-	cmd := exec.Command(args[0], args[1:]...)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		return err
-	}
-
-	raw, err := os.ReadFile(file.Name())
-	if err != nil {
-		return err
-	}
-
-	*initialValue = string(raw)
-	return nil
 }

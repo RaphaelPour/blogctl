@@ -20,7 +20,6 @@ import (
 	"embed"
 	"fmt"
 	"html/template"
-	"io"
 	"os"
 	"path"
 	"path/filepath"
@@ -30,11 +29,11 @@ import (
 	plainTemplate "text/template"
 	"time"
 
-	_ "embed"
-
+	"github.com/RaphaelPour/blogctl/internal/common"
 	"github.com/RaphaelPour/blogctl/internal/config"
 	"github.com/RaphaelPour/blogctl/internal/highlighter"
 	"github.com/RaphaelPour/blogctl/internal/metadata"
+
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/parser"
 	"github.com/gorilla/feeds"
@@ -50,22 +49,14 @@ var (
 	content embed.FS
 
 	indexTemplatePath = path.Join(PUBLIC_DIR_PATH, "index.tmpl.html")
-	indexTemplate     = string(unwrap(content.ReadFile(indexTemplatePath)))
+	indexTemplate     = string(common.Unwrap(content.ReadFile(indexTemplatePath)))
 
 	postTemplatePath = path.Join(PUBLIC_DIR_PATH, "post.tmpl.html")
-	postTemplate     = string(unwrap(content.ReadFile(postTemplatePath)))
+	postTemplate     = string(common.Unwrap(content.ReadFile(postTemplatePath)))
 
 	staticTemplatePath = path.Join(PUBLIC_DIR_PATH, "static.tmpl.html")
-	staticTemplate     = string(unwrap(content.ReadFile(staticTemplatePath)))
+	staticTemplate     = string(common.Unwrap(content.ReadFile(staticTemplatePath)))
 )
-
-func unwrap[T any](value T, err error) T {
-	if err != nil {
-		panic(err)
-	}
-
-	return value
-}
 
 type Post struct {
 	Title            string
@@ -148,7 +139,7 @@ var renderCmd = &cobra.Command{
 			}
 
 			fmt.Printf("Rendering post #%02d: %s\n", i, dir.Name())
-			slugTitle := slug(meta.Title)
+			slugTitle := common.Slug(meta.Title)
 
 			content, err := os.ReadFile(GetContentFile(postPath))
 			if err != nil {
@@ -167,7 +158,7 @@ var renderCmd = &cobra.Command{
 			for _, file := range re.FindAllStringSubmatch(string(rendered), -1) {
 				src := filepath.Join(BlogPath, fmt.Sprintf("%s/%s", slugTitle, file[1]))
 				dst := filepath.Join(OutPath, fmt.Sprintf("%s_%s", slugTitle, file[1]))
-				if err := copyFile(src, dst); err != nil {
+				if err := common.CopyFile(src, dst); err != nil {
 					return fmt.Errorf("error copying '%s' to '%s': %w", src, dst, err)
 				}
 			}
@@ -257,7 +248,7 @@ var renderCmd = &cobra.Command{
 					Href: fmt.Sprintf(
 						"https://%s/%s.html",
 						cfg.Domain,
-						slug(post.Title),
+						common.Slug(post.Title),
 					),
 				},
 				Author:  &feeds.Author{Name: cfg.Author},
@@ -305,7 +296,7 @@ var renderCmd = &cobra.Command{
 		}
 
 		// write content from public dir
-		for _, file := range unwrap(content.ReadDir(PUBLIC_DIR_PATH)) {
+		for _, file := range common.Unwrap(content.ReadDir(PUBLIC_DIR_PATH)) {
 			if strings.Contains(file.Name(), "tmpl") {
 				continue
 			}
@@ -329,7 +320,7 @@ var renderCmd = &cobra.Command{
 				src = filepath.Join(BlogPath, src)
 			}
 			dst := filepath.Join(OutPath, filepath.Base(src))
-			if err := copyFile(src, dst); err != nil {
+			if err := common.CopyFile(src, dst); err != nil {
 				return fmt.Errorf("copy chill-file %s to %s failed: %w", src, dst, err)
 			}
 			fmt.Printf("copied chill-file %s to %s\n", src, dst)
@@ -337,26 +328,6 @@ var renderCmd = &cobra.Command{
 
 		return nil
 	},
-}
-
-func copyFile(sourceFile, destinationFile string) error {
-	src, err := os.Open(sourceFile)
-	if err != nil {
-		return fmt.Errorf("error open source file %s: %w", sourceFile, err)
-	}
-	defer src.Close()
-
-	dst, err := os.Create(destinationFile)
-	if err != nil {
-		return fmt.Errorf("error open destination file %s: %w", destinationFile, err)
-	}
-	defer dst.Close()
-
-	_, err = io.Copy(dst, src)
-	if err != nil {
-		return fmt.Errorf("error copying file: %w", err)
-	}
-	return nil
 }
 
 const (

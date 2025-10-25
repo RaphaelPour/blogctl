@@ -52,7 +52,7 @@ var listCmd = &cobra.Command{
 		}
 
 		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"Creation date", "Status", "Static", "Title"})
+		table.Header("Creation date", "Status", "Static", "Title")
 
 		// Compile title regex pattern, if any
 		titlePattern := make(RegexpSet, len(titleFilter))

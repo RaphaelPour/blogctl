@@ -94,16 +94,21 @@ var listCmd = &cobra.Command{
 				continue
 			}
 
-			table.Append([]string{
+			err = table.Append([]string{
 				metadata.Date(),
 				metadata.Status,
 				fmt.Sprintf("%t", metadata.Static),
 				metadata.Title,
 			})
 
+			if err != nil {
+				return err
+			}
 		}
 
-		table.Render()
+		if err := table.Render(); err != nil {
+
+		}
 
 		return nil
 	},

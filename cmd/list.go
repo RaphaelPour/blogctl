@@ -107,7 +107,7 @@ var listCmd = &cobra.Command{
 		}
 
 		if err := table.Render(); err != nil {
-
+			return err
 		}
 
 		return nil

@@ -20,6 +20,17 @@ a {
     text-decoration-thickness: 2px;
     text-underline-offset: 2px;
 }
+
+table{
+	border-top: 1px solid black;
+	border-collapse: collapse;
+}
+
+/* zebra stripes, alternating row color*/
+tbody tr:nth-child(2n+1) {
+  background: #FAFAFA;
+}
+
 .footnotes > hr {
     border: 1px #eee solid;
 }

@@ -48,6 +48,7 @@ func CopyFile(sourceFile, destinationFile string) error {
 	return nil
 }
 
+/* https://github.com/MarkusFreitag/changelogger/blob/master/pkg/editor/editor.go */
 func Editor(initialValue *string) error {
 	var editor string
 	if val, ok := os.LookupEnv("EDITOR"); ok {

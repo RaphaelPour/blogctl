@@ -62,7 +62,7 @@ func (s *Site) loadPosts() error {
 			continue
 		}
 
-		fmt.Printf("Rendering post #%02d: %s\n", i, dir.Name())
+		s.logf("Rendering post #%02d: %s\n", i, dir.Name())
 
 		post, err := s.loadPost(postPath, meta)
 		if err != nil {
@@ -144,8 +144,6 @@ func linkNavigation(posts []Post) {
 		if nextPost >= 0 {
 			posts[i].NextPostLink = posts[nextPost].Link
 			posts[nextPost].PreviousPostLink = posts[i].Link
-
-			fmt.Println(posts[i].Title, "<->", posts[nextPost].Title)
 		}
 		nextPost = i
 	}

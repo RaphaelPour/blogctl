@@ -2,6 +2,7 @@ package site
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"time"
 
@@ -15,6 +16,10 @@ type Options struct {
 	BlogPath string
 	OutPath  string
 	Force    bool
+
+	// Log receives human-readable progress messages. If nil, progress output
+	// is discarded, which keeps the renderer silent when used as a library.
+	Log io.Writer
 }
 
 // Site is the in-memory model of a blog ready to be rendered. It owns the
@@ -27,6 +32,13 @@ type Site struct {
 	Posts     []Post // all public posts, sorted newest-first, including static pages
 	Published []Post // non-static posts shown on the index and in the feed
 	Feed      *feeds.Feed
+
+	log io.Writer
+}
+
+// logf writes a progress message to the configured log writer.
+func (s *Site) logf(format string, a ...any) {
+	fmt.Fprintf(s.log, format, a...)
 }
 
 // New loads the blog configuration and all public posts from disk, rendering
@@ -37,9 +49,15 @@ func New(opts Options) (*Site, error) {
 		return nil, err
 	}
 
+	logw := opts.Log
+	if logw == nil {
+		logw = io.Discard
+	}
+
 	s := &Site{
 		Config:  cfg,
 		Options: opts,
+		log:     logw,
 		Feed: &feeds.Feed{
 			Title:       cfg.Title,
 			Link:        &feeds.Link{Href: fmt.Sprintf("https://%s", cfg.Domain)},

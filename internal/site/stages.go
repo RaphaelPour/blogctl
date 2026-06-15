@@ -196,7 +196,7 @@ func (copyChillFilesStage) Run(s *Site) error {
 		if err := common.CopyFile(src, dst); err != nil {
 			return fmt.Errorf("copy chill-file %s to %s failed: %w", src, dst, err)
 		}
-		fmt.Printf("copied chill-file %s to %s\n", src, dst)
+		s.logf("copied chill-file %s to %s\n", src, dst)
 	}
 
 	return nil

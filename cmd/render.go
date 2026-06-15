@@ -17,6 +17,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"os"
+
 	"github.com/RaphaelPour/blogctl/internal/site"
 
 	"github.com/spf13/cobra"
@@ -28,11 +30,16 @@ var renderCmd = &cobra.Command{
 	Short: "Renders blog to static website",
 	Long:  "Collects all posts and renders the markdown using the metadata as static website",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		s, err := site.New(site.Options{
+		opts := site.Options{
 			BlogPath: BlogPath,
 			OutPath:  OutPath,
 			Force:    Force,
-		})
+		}
+		if Verbose {
+			opts.Log = os.Stdout
+		}
+
+		s, err := site.New(opts)
 		if err != nil {
 			return err
 		}
@@ -48,6 +55,7 @@ const (
 var (
 	OutPath string
 	Force   bool
+	Verbose bool
 )
 
 func init() {
@@ -67,5 +75,13 @@ func init() {
 		"f",
 		false,
 		"Overwrites an existing output folder.",
+	)
+
+	renderCmd.Flags().BoolVarP(
+		&Verbose,
+		"verbose",
+		"v",
+		false,
+		"Print progress while rendering.",
 	)
 }

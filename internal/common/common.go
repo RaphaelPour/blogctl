@@ -5,11 +5,19 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"strings"
 
 	"github.com/kballard/go-shellquote"
 )
+
+const CONTENT_FILE = "content.md"
+
+// GetContentFile returns the path to a post's markdown content file.
+func GetContentFile(postPath string) string {
+	return filepath.Join(postPath, CONTENT_FILE)
+}
 
 func Unwrap[T any](value T, err error) T {
 	if err != nil {

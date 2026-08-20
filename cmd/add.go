@@ -29,12 +29,6 @@ import (
 	"github.com/fatih/color"
 )
 
-const CONTENT_FILE = "content.md"
-
-func GetContentFile(postPath string) string {
-	return filepath.Join(postPath, CONTENT_FILE)
-}
-
 var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a new post",
@@ -72,7 +66,7 @@ var addCmd = &cobra.Command{
 			return fmt.Errorf("Error creating post dir: %s", err)
 		}
 
-		if err := os.WriteFile(GetContentFile(postPath), []byte(content), os.ModePerm); err != nil {
+		if err := os.WriteFile(common.GetContentFile(postPath), []byte(content), os.ModePerm); err != nil {
 			rescuePost(content)
 			return fmt.Errorf("Error writing post: %s", err)
 		}
@@ -89,7 +83,7 @@ var addCmd = &cobra.Command{
 			return err
 		}
 
-		color.Green(GetContentFile(postPath))
+		color.Green(common.GetContentFile(postPath))
 		return nil
 	},
 }

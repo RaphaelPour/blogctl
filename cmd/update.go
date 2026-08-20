@@ -41,7 +41,7 @@ var updateCmd = &cobra.Command{
 			return fmt.Errorf("Slug missing")
 		}
 
-		contentFile := GetContentFile(filepath.Join(BlogPath, Slug))
+		contentFile := common.GetContentFile(filepath.Join(BlogPath, Slug))
 		if _, err := os.Stat(contentFile); os.IsNotExist(err) {
 			return fmt.Errorf("Error updating post '%s': Not existing", Slug)
 		}

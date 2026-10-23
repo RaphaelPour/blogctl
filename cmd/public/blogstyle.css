@@ -11,7 +11,9 @@ h1 {
     margin: 0px;
 }
 body {
-    width: 100ch;
+    width: auto;
+    max-width: 100ch;
+    padding: 0 1rem;
     margin-right: auto;
     margin-left: auto;
     font-family: "Roboto Slab", serif;

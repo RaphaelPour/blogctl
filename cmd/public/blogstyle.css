@@ -47,14 +47,16 @@ tbody tr:nth-child(2n+1) {
 .footnotes > hr {
     border: 1px #eee solid;
 }
-.footnotes > ol {
-    color: gray;
-}
+
 .date {
     margin-top: 10px;
     font-size: small;
-    color: gray;
 }
+
+.date, .footnotes > ol {
+    color: #666
+}
+
 .post {
     margin-top: 10px;
 }

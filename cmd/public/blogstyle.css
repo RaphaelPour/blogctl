@@ -17,6 +17,7 @@ body {
     margin-right: auto;
     margin-left: auto;
     font-family: "Roboto Slab", serif;
+    line-height: 1.5;
 }
 img {
     width: auto;
